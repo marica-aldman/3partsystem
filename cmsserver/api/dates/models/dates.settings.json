@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "dates",
+  "info": {
+    "name": "dates"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "date": {
+      "type": "datetime"
+    },
+    "salons": {
+      "via": "dates",
+      "collection": "salon"
+    },
+    "moviedate": {
+      "via": "date",
+      "model": "moviedate"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "salons",
+  "info": {
+    "name": "salon"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "salon": {
+      "type": "integer"
+    },
+    "dates": {
+      "collection": "dates",
+      "via": "salons",
+      "dominant": true
+    }
+  }
+}

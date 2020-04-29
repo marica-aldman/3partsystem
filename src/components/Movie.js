@@ -20,8 +20,10 @@ class Movie extends Component {
                     movie_dates = res.data
                 )
             })
-        movie_dates.foreach(async function (entry) {
-            if (entry.movie.id != this.props.match.params.id) {
+        movie_dates.map((entry) => {
+            console.log(entry)
+            if (entry.movie.id == this.props.match.params.id) {
+                console.log("here")
                 movieDates.append(entry)
             }
         })
@@ -30,7 +32,7 @@ class Movie extends Component {
 
     render() {
         return (
-            <div> Test { console.log(this.state)}</div>
+            <div> Test { console.log(this.state)} {console.log(this.props.match.params.id)}</div>
         )
     }
 }

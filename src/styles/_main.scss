@@ -15,7 +15,7 @@ main {
             padding: 20px;
             vertical-align: middle;
             .nav-logo {
-                height: 5rem;
+                height: 4rem;
             }
             a:focus {
                 outline: 0;
@@ -93,7 +93,7 @@ main {
     margin-right: 10px;
     box-sizing: border-box;
 
-    form {
+    .card-wrapper {
         min-height: 480px;
         display: flex;
         flex-direction: column;
@@ -153,4 +153,55 @@ main {
     border: 2px solid rgb(75,75,253);
     box-shadow: 5px 5px rgba(100, 100, 100, 0.288);
     transition: .5s;
+}
+
+.addFormMain {
+    display: flex;
+    justify-content: center;
+
+    .addFormWrapper {
+        max-width: 18rem;
+        border: 1px solid rgb(209, 209, 209);
+        padding: 10px;
+        
+        .addFormText{
+            margin: 20px;
+        }
+        
+        .addFormContainer{
+            margin: 20px;
+            .addForm{
+                .addFormInput{
+                    margin: 5px;
+                    input {
+                        width: 100%;
+                    }
+                }
+                .addFormTextArea{
+                    margin: 5px;
+                    textarea{
+                        min-height: 8rem;
+                        width: 100%;
+                    }
+                }
+                .addFormButtonDiv{
+                    margin: 5px;
+                    float:right;
+                    .addFormButton {
+                        min-width: 150px;
+                        height: 2rem;
+                        border: 1px solid rgb(75, 75, 253);
+                        border-radius: 25px;
+                        background-color: rgb(144, 144, 255);
+                    }
+                    .addFormButton:focus {
+                        outline: 0;
+                        border: 2px solid rgb(75,75,253);
+                        box-shadow: 5px 5px rgba(100, 100, 100, 0.288);
+                        transition: .5s;
+                    }
+                }
+            }
+        }  
+    }
 }

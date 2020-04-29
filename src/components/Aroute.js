@@ -6,11 +6,13 @@ import Bookings from "./Bookings";
 import Movie from "./Movie";
 import Nav from "./Nav";
 
+import addMovie from "../admincomp/addMovie";
 const Aroute = () => {
     return (
         <BrowserRouter>
             <Nav />
             <Route path="/bookings" exact component={Bookings}></Route>
+            <Route path="/addMovie" exact component={addMovie}></Route>
             <Route path="/movie/:id" render={(props) => <Movie {...props} />}></Route>
             <Route path="/" exact component={Main}></Route>
         </BrowserRouter>

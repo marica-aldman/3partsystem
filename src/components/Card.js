@@ -7,7 +7,7 @@ const Card = (props) => {
     return (
 
         <div className={"card"} style={{ width: "18rem" }}>
-            <form onSubmit={props.onSubmitHandler}>
+            <div className={"card-wrapper"}>
                 <div className={"image_container"}>
                     <img src={"http://localhost:1337" + props.data.image[0].formats.thumbnail.url} className={"card-img-top"} alt={"Movie"} />
                 </div>
@@ -18,7 +18,7 @@ const Card = (props) => {
                         <Link to={"/movie/" + props.data.id}><button className={"card-button"} id={props.data.id}>Boka</button></Link>
                     </div>
                 </div>
-            </form>
+            </div>
         </div >
 
     )

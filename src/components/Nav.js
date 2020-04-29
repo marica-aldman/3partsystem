@@ -9,7 +9,7 @@ class Nav extends Component {
         super(props);
 
         this.state = {
-            logo: "#",
+            logo: "http://localhost:1337/uploads/thumbnail_2-23204_banner-scroll-png-scroll-clipart-transparent_81e9842716.png",
             loginButtonText: "Logga in",
             showLogin: false,
         }

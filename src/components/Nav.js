@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import LoginForm from "./LoginForm";
+import { Link, Redirect } from "react-router-dom";
+import LoginForm from "../auth/LoginForm";
 
 
 class Nav extends Component {
@@ -11,20 +11,29 @@ class Nav extends Component {
         this.state = {
             logo: "http://localhost:1337/uploads/thumbnail_2-23204_banner-scroll-png-scroll-clipart-transparent_81e9842716.png",
             loginButtonText: "Logga in",
-            showLogin: false,
+            logoutButtonText: "Logga ut",
+            toggleLogin: false,
+            showLogin: "hide",
         }
     }
 
-    handleOnclickLogin = () => {
-        if (this.state.showLogin) {
-            return (this.setState({ loginButtonText: "Logga in", showLogin: false }));
+    handleOnclickLogin = (e) => {
+        e.preventDefault()
+        if (this.state.toggleLogin) {
+            return (this.setState({ loginButtonText: "Logga in", toggleLogin: false, showLogin: "hide" }));
         } else {
-            return (this.setState({ loginButtonText: "...", showLogin: true }));
+            return (this.setState({ loginButtonText: "...", toggleLogin: true, showLogin: "" }));
         }
     }
 
-    handleSubmit = (event) => {
-        event.preventDefault()
+    changeShow = (e) => {
+        this.setState({ loginButtonText: "Logga in", toggleLogin: !e, showLogin: "hide" });
+    }
+
+    handleOnclickLogout = (e) => {
+        e.preventDefault()
+        this.props.changeUser(null);
+        this.props.changeUserGroup(null);
     }
 
     render() {
@@ -42,17 +51,36 @@ class Nav extends Component {
                             <button className={""}>Program</button>
                         </Link>
                     </li>
-                    <li>
-                        <Link to="/bookings">
-                            <button className={""}>Bokningar</button>
-                        </Link>
-                    </li>
-                    <li>
-                        <form onSubmit={this.handleSubmit}>
-                            <button className={this.state.showLogin ? "selected" : "deselected"} onClick={this.handleOnclickLogin}>{this.state.loginButtonText}</button>
-                        </form>
-                        <LoginForm showClass={this.state.showLogin} />
-                    </li>
+                    {(this.props.aUserGroup === "admin") &&
+                        <li>
+                            <Link to="/Admin">
+                                <button className={""}>Översikt</button>
+                            </Link>
+                        </li>
+                    }
+                    {(this.props.aUserGroup === "Authenticated") &&
+                        <li>
+                            <Link to="/CustomerOverview">
+                                <button className={""}>Översikt</button>
+                            </Link>
+                        </li>
+                    }
+                    {this.props.aUser &&
+                        <li>
+                            <form onSubmit={this.handleOnclickLogout}>
+                                <button onClick={this.handleOnclickLogout}>{this.state.logoutButtonText}</button>
+                            </form>
+                        </li>
+                    }
+                    {!this.props.aUser &&
+                        <li>
+                            <form onSubmit={this.handleOnclickLogin}>
+                                <button className={this.state.toggleLogin ? "selected" : "deselected"} onClick={this.handleOnclickLogin}>{this.state.loginButtonText}</button>
+                            </form>
+                            {this.state.toggleLogin &&
+                                <LoginForm changeShow={this.changeShow} aUser={this.props.aUser} changeUser={this.props.changeUser} changeUserGroup={this.props.changeUserGroup} />}
+                        </li>
+                    }
                 </ul>
             </nav >
 

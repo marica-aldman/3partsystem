@@ -16,6 +16,9 @@
       "collection": "dates",
       "via": "salons",
       "dominant": true
+    },
+    "seats": {
+      "type": "integer"
     }
   }
 }

@@ -51,6 +51,7 @@ class addMovie extends Component {
             price: this.state.price,
             image: [res1.data[0]]
         })
+        console.log(res2)
     }
 
     render() {

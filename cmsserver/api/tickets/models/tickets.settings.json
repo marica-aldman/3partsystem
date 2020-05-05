@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tickets",
+  "info": {
+    "name": "tickets"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "NOTickets": {
+      "type": "integer"
+    },
+    "ref": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "moviedate": {
+      "model": "moviedate",
+      "via": "tickets"
+    }
+  }
+}

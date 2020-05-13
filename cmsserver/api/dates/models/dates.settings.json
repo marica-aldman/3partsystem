@@ -10,15 +10,25 @@
   },
   "attributes": {
     "date": {
-      "type": "datetime"
+      "type": "date"
     },
-    "salons": {
-      "via": "dates",
-      "collection": "salon"
+    "salon": {
+      "model": "salon",
+      "via": "dates"
     },
-    "moviedate": {
-      "via": "date",
-      "model": "moviedate"
+    "time": {
+      "type": "time"
+    },
+    "TicketsLeft": {
+      "type": "integer"
+    },
+    "movie": {
+      "model": "movie",
+      "via": "dates"
+    },
+    "tickets": {
+      "collection": "tickets",
+      "via": "theDate"
     }
   }
 }

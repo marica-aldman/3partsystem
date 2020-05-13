@@ -17,13 +17,18 @@ class AdminNav extends Component {
             <nav className={"second-menu"} >
                 <ul>
                     <li>
-                        <Link to="/">
-                            <button className={""}>Movies</button>
+                        <Link to="/mod/movies">
+                            <button className={""}>Filmer</button>
                         </Link>
                     </li>
                     <li>
-                        <Link to="/bookings">
-                            <button className={""}>Dates</button>
+                        <Link to="/mod/salons">
+                            <button className={""}>Salonger</button>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/mod/shedules">
+                            <button className={""}>Scheman</button>
                         </Link>
                     </li>
                 </ul>

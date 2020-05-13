@@ -12,15 +12,17 @@
     "NOTickets": {
       "type": "integer"
     },
-    "ref": {
-      "type": "string"
-    },
-    "category": {
-      "type": "string"
-    },
-    "moviedate": {
-      "model": "moviedate",
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user",
       "via": "tickets"
+    },
+    "TotalPrice": {
+      "type": "decimal"
+    },
+    "theDate": {
+      "via": "tickets",
+      "model": "dates"
     }
   }
 }

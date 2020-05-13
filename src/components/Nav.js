@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LoginForm from "../auth/LoginForm";
 
 
@@ -33,7 +33,10 @@ class Nav extends Component {
     handleOnclickLogout = (e) => {
         e.preventDefault()
         this.props.changeUser(null);
+        this.props.changeUserAuth(null);
         this.props.changeUserGroup(null);
+        localStorage.clear();
+        window.location.reload(false);
     }
 
     render() {
@@ -66,7 +69,7 @@ class Nav extends Component {
                         </li>
                     }
                     {this.props.aUser &&
-                        <li>
+                        <li className={"login"}>
                             <form onSubmit={this.handleOnclickLogout}>
                                 <button onClick={this.handleOnclickLogout}>{this.state.logoutButtonText}</button>
                             </form>
@@ -78,7 +81,7 @@ class Nav extends Component {
                                 <button className={this.state.toggleLogin ? "selected" : "deselected"} onClick={this.handleOnclickLogin}>{this.state.loginButtonText}</button>
                             </form>
                             {this.state.toggleLogin &&
-                                <LoginForm changeShow={this.changeShow} aUser={this.props.aUser} changeUser={this.props.changeUser} changeUserGroup={this.props.changeUserGroup} />}
+                                <LoginForm changeShow={this.changeShow} aUser={this.props.aUser} changeUser={this.props.changeUser} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} />}
                         </li>
                     }
                 </ul>

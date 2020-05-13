@@ -48,7 +48,8 @@ class LoginForm extends Component {
             })
             .then(res => {
                 this.setState({ failedLogin: false });
-                this.props.changeUser(res.data.jwt);
+                this.props.changeUserAuth(res.data.jwt);
+                this.props.changeUser(res.data.user.id);
                 this.props.changeUserGroup(res.data.user.role.name);
                 this.props.changeShow(true);
             })
@@ -71,7 +72,8 @@ class LoginForm extends Component {
             })
             .then(res => {
                 this.setState({ failedRegistration: false });
-                this.props.changeUser(res.data.jwt);
+                this.props.changeUserAuth(res.data.jwt);
+                this.props.changeUser(res.data.user.id);
                 this.props.changeShow(true);
             })
             .catch(error => {

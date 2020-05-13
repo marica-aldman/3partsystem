@@ -2,46 +2,72 @@ import React, { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import "../styles/_main.scss"
 import Main from "./Main";
-import Bookings from "./Bookings";
 import Movie from "./Movie";
 import Nav from "./Nav";
 
 import AdminNav from "../admincomp/AdminNav";
 import AdminView from "../admincomp/AdminView";
-import addMovie from "../admincomp/addMovie";
-import addTimeDate from "../admincomp/addTimeDate";
+import AddMovie from "../admincomp/AddMovie";
+import EditMovie from "../admincomp/EditMovie";
+import HandleMovies from "../admincomp/HandleMovies";
+import AddSalon from "../admincomp/AddSalon";
+import EditSalon from "../admincomp/EditSalon";
+import HandleSalons from "../admincomp/HandleSalons";
+import HandleShedule from "../admincomp/HandleShedule";
+import Schedules from "../admincomp/Schedules";
+import EditShedule from "../admincomp/EditShedule";
 
 import CustomerNav from "../customercomp/CustomerNav";
 import CustomerOverview from "../customercomp/CustomerOverview";
+import Bookings from "../customercomp/Bookings";
 class Aroute extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            user: null,
-            userGroup: null,
+            user: null || localStorage.getItem('u'),
+            userAuth: null || localStorage.getItem('ua'),
+            userGroup: null || localStorage.getItem('ug'),
+            movie: null || localStorage.getItem('movie'),
         }
     }
 
-    changeUser = (e) => { this.setState({ user: e }) }
+    changeUser = (e) => {
+        this.setState({ user: e })
+        localStorage.setItem('u', this.state.user)
+    }
+    changeUserAuth = (e) => {
+        this.setState({ userAuth: e });
+        localStorage.setItem('ua', this.state.userAuth)
+    }
     changeUserGroup = (e) => {
         this.setState({ userGroup: e });
-        console.log(e);
+        localStorage.setItem('ug', this.state.userGroup)
+    }
+    changeMovie = (e) => {
+        this.setState({ movie: e });
+        localStorage.setItem('movie', e);
     }
 
     render() {
         return (
-            <BrowserRouter>
-                <Nav aUser={this.state.user} aUserGroup={this.state.userGroup} changeUser={this.changeUser} changeUserGroup={this.changeUserGroup} />
-                {this.state.userGroup === "admin" && <AdminNav aUser={this.state.user} />}
-                {this.state.userGroup === "Authenticated" && <CustomerNav aUser={this.state.user} />}
-                <Route path="/bookings" exact component={Bookings}></Route>
-                <Route user={this.state.user} path="/addMovie" exact component={addMovie}></Route>
-                <Route user={this.state.user} path="/addDate" exact component={addTimeDate}></Route>
-                <Route path="/Admin" exact component={() => <AdminView aUser={this.state.user} />}></Route>
-                <Route path="/CustomerOverview" exact component={() => <CustomerOverview aUser={this.state.user} />}></Route>
-                <Route path="/movie/:id" render={(props) => <Movie {...props} />}></Route>
-                <Route path="/" exact component={Main}></Route>
+            < BrowserRouter >
+                <Nav aUser={this.state.user} aUserGroup={this.state.userGroup} changeUser={this.changeUser} changeUserAuth={this.changeUserAuth} changeUserGroup={this.changeUserGroup} />
+                {(this.state.userGroup === "admin" || localStorage.getItem('ug') === "admin") && <AdminNav aUser={this.state.user} aUserGroup={this.state.userGroup} />}
+                {(this.state.userGroup === "Authenticated" || localStorage.getItem('ug') === "Authenticated") && <CustomerNav aUser={this.state.user} aUserGroup={this.state.userGroup} />}
+                <Route path="/bookings" exact component={() => <Bookings aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/Admin" exact component={() => <AdminView aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/mod/movies" exact component={() => <HandleMovies aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/mod/editMovie" exact component={() => <EditMovie aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/mod/addMovie" exact component={() => <AddMovie aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/mod/salons" exact component={() => <HandleSalons aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route><Route path="/mod/editSalon" exact component={() => <EditSalon aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/mod/addSalon" exact component={() => <AddSalon aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/mod/createShedule" exact component={() => <HandleShedule aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/mod/shedules" exact component={() => <Schedules aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/mod/editShedule" exact component={() => <EditShedule aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/CustomerOverview" exact component={() => <CustomerOverview aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/movie/" exact component={() => <Movie aUser={this.state.user} aUserGroup={this.state.userGroup} movie={this.state.movie} />}></Route>
+                <Route path="/" exact component={() => <Main aUser={this.state.user} aUserGroup={this.state.userGroup} doChangeMovie={this.changeMovie} movie={this.state.movie} />}></Route>
             </BrowserRouter >
         )
     }

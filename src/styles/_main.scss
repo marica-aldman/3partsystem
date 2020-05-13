@@ -6,7 +6,7 @@ main {
 }
 
 .top-menu {
-    margin-bottom: 2rem;
+    margin-bottom: 1.8rem;
     ul {
         height: 5rem;
         list-style: none;
@@ -24,7 +24,7 @@ main {
                 }
             }
             button {
-                width: 10rem;
+                width: 8rem;
                 height: 2rem;
                 border: 1px solid rgb(75, 75, 253);
                 border-radius: 25px;
@@ -79,6 +79,43 @@ main {
                         margin-left: 0;
                     }
                 }
+            }
+        }
+    }
+}
+
+.second-menu {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    ul {
+        height: 5rem;
+        list-style: none;
+        li{
+            float: left;
+            padding: 20px;
+            vertical-align: middle;
+            .nav-logo {
+                height: 4rem;
+            }
+            a:focus {
+                outline: 0;
+                button {
+                    border: 2px;
+                }
+            }
+            button {
+                width: 8rem;
+                height: 2rem;
+                border: 1px solid rgb(75, 75, 253);
+                border-radius: 25px;
+                background-color: rgb(144, 144, 255);
+            }
+            button:focus {
+                outline: 0;
+                border: 2px solid rgb(75,75,253);
+                box-shadow: 5px 5px rgba(100, 100, 100, 0.288);
+                transition: .5s;
             }
         }
     }
@@ -204,4 +241,158 @@ main {
             }
         }  
     }
+}
+
+.showForm {
+    display: initial !important;
+}
+
+.showings-card {
+    max-width: 36rem;
+    min-height: 480px;
+    border: 1px solid rgb(209, 209, 209);
+    float: left;
+    padding: 10px;
+    margin-right: 10px;
+    box-sizing: border-box;
+    .showings-card-wrapper {
+        width: 100%;
+        form {
+        width: 100%;
+            table{
+        width: 100%;
+                tr{
+                    th, td {
+                        width: 4rem;
+                    }
+                    th:nth-child(2){
+                        width: 6rem;
+                    }
+                    td:nth-child(2){
+                        width: 6rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.shedulesMain {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    .shedulesWrapper{
+        div{
+            div{
+                button {
+                    width: 8rem;
+                    height: 2rem;
+                    border: 1px solid rgb(75, 75, 253);
+                    border-radius: 25px;
+                    background-color: rgb(144, 144, 255);
+                }
+                button:focus {
+                    outline: 0;
+                    border: 2px solid rgb(75,75,253);
+                    box-shadow: 5px 5px rgba(100, 100, 100, 0.288);
+                    transition: .5s;
+                }
+            }
+        }
+        table{
+            tbody{
+                tr{
+                    td{
+                        .editShedule{
+                            .editSheduleButton {
+                                width: 4rem;
+                                height: 2rem;
+                                border: 1px solid rgb(75, 75, 253);
+                                border-radius: 25px;
+                                background-color: rgb(144, 144, 255);
+                            }
+                            .editSheduleButton:focus {
+                                outline: 0;
+                                border: 2px solid rgb(75,75,253);
+                                box-shadow: 5px 5px rgba(100, 100, 100, 0.288);
+                                transition: .5s;
+                            }
+                        }
+                        .MovieList {
+                            width: 4rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.addScheduleMain{
+    padding: 2rem;
+    .addScheduleWrapper{
+        display: flex;
+        justify-content: center;
+        .addSchedule{
+            font-size: larger;
+            select{
+                width: 10rem;
+                height: 2rem;
+                border: 1px solid rgb(75, 75, 253);
+                border-radius: 25px;
+                background-color: rgb(144, 144, 255);
+                overflow:scroll;
+            }
+            .savebutton {
+                width: 8rem;
+                height: 2rem;
+                border: 1px solid rgb(75, 75, 253);
+                border-radius: 25px;
+                background-color: rgb(144, 144, 255);
+            }
+            .savebutton:focus {
+                outline: 0;
+                border: 2px solid rgb(75,75,253);
+                box-shadow: 5px 5px rgba(100, 100, 100, 0.288);
+                transition: .5s;
+            }
+        }
+    }
+}
+
+.editSheduleMain{
+    padding: 2rem;
+    .editSheduleWrapper{
+        display: flex;
+        justify-content: center; 
+        .editShedule{
+            font-size: larger;
+            select{
+                width: 10rem;
+                height: 2rem;
+                border: 1px solid rgb(75, 75, 253);
+                border-radius: 25px;
+                background-color: rgb(144, 144, 255);
+                overflow:scroll;
+                margin-bottom: .8rem;
+            }
+            button {
+                width: 8rem;
+                height: 2rem;
+                border: 1px solid rgb(75, 75, 253);
+                border-radius: 25px;
+                background-color: rgb(144, 144, 255);
+            }
+            button:focus {
+                outline: 0;
+                border: 2px solid rgb(75,75,253);
+                box-shadow: 5px 5px rgba(100, 100, 100, 0.288);
+                transition: .5s;
+            }
+        }
+    }
+}
+
+table > thead > tbody > tfoot > tr > .showForm {
+    display: initial !important;
 }

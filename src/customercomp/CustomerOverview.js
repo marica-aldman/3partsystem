@@ -11,7 +11,7 @@ class CustomerOverview extends Component {
 
     render() {
 
-        if (!this.props.aUser) {
+        if (this.props.aUserGroup != 'Authenticated') {
             return (<Redirect to="/" />)
         }
 

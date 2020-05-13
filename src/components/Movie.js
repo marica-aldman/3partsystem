@@ -1,38 +1,56 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
+import MovieInfo from './MovieInfo';
+import BookingStructure from './BookingStructure';
+
 
 class Movie extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            moviedate: [],
+            movie: undefined,
+            userGroup: localStorage.getItem('ug') || null,
         }
     }
 
     componentDidMount() {
-        var movieDates = []
-        var movie_dates = []
         axios
-            .get('http://localhost:1337/moviedates/')
+            .get('http://localhost:1337/movies/',
+                {
+                    params: {
+                        id: this.props.movie
+                    }
+                })
             .then((res) => {
-                return (
-                    movie_dates = res.data
-                )
+
+                this.setState({ movie: res.data[0] });
+                axios
+                    .get('http://localhost:1337/dates/')
+                    .then((result) => {
+                        this.state.movie.dates.map((date) => {
+                            var i = 0;
+                            while (i < result.data.length) {
+                                if (result.data[i].id === date.id) {
+                                    localStorage.setItem(result.data[i].id, JSON.stringify(result.data[i]));
+                                }
+                                i = i + 1;
+                            }
+                            return (date)
+                        })
+                    })
             })
-        movie_dates.map((entry) => {
-            console.log(entry)
-            if (entry.movie.id == this.props.match.params.id) {
-                console.log("here")
-                movieDates.append(entry)
-            }
-        })
-        this.setState({ moviedate: movieDates })
     }
 
     render() {
+        if (!this.props.movie) {
+            return (<Redirect to="/" />)
+        }
         return (
-            <div> Test { console.log(this.state)} {console.log(this.props.match.params.id)}</div>
+            <div>
+                {this.state.movie && <MovieInfo movie={this.state.movie} />}
+                {this.state.dates && <BookingStructure aUserGroup={this.props.aUserGroup} />}
+            </div >
         )
     }
 }

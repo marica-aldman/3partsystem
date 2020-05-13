@@ -9,16 +9,15 @@
     "timestamps": true
   },
   "attributes": {
-    "salon": {
-      "type": "integer"
-    },
-    "dates": {
-      "collection": "dates",
-      "via": "salons",
-      "dominant": true
-    },
     "seats": {
       "type": "integer"
+    },
+    "Name": {
+      "type": "string"
+    },
+    "dates": {
+      "via": "salon",
+      "collection": "dates"
     }
   }
 }

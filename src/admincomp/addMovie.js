@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { Redirect, withRouter } from "react-router-dom";
 
-class addMovie extends Component {
+class AddMovie extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            jwt: null || localStorage.getItem('ua'),
             title: "",
             blurb: "",
             price: "",
@@ -16,17 +18,14 @@ class addMovie extends Component {
 
     async eventChangeTitle(e) {
         this.setState({ title: e.target.value })
-        console.log(this.state)
     }
 
     async eventChangeBlurb(e) {
         this.setState({ blurb: e.target.value })
-        console.log(this.state)
     }
 
     async eventChangePrice(e) {
         this.setState({ price: e.target.value })
-        console.log(this.state)
     }
 
     async eventChangeImage(e) {
@@ -41,20 +40,25 @@ class addMovie extends Component {
 
         data.append("files", this.state.imageFile)
 
-        const res1 = await axios
+        const res = await axios
             .post('http://localhost:1337/upload/', data)
-        this.setState({ imageID: res1.data[0].id })
+        this.setState({ imageID: res.data[0].id })
         // add data to movies, dont forget to use the return data for the image
-        const res2 = await axios.post('http://localhost:1337/movies/', {
-            title: this.state.title,
-            description: this.state.blurb,
-            price: this.state.price,
-            image: [res1.data[0]]
-        })
-        console.log(res2)
+        await axios.post('http://localhost:1337/movies/',
+            {
+                title: this.state.title,
+                description: this.state.blurb,
+                price: this.state.price,
+                image: [res.data[0]]
+            })
+        this.props.history.push("/mod/movies");
     }
 
     render() {
+
+        if (this.props.aUserGroup != "admin") {
+            return (<Redirect to="/" />)
+        }
         let divtext;
         if (this.state.imageID) {
             divtext = "Filmen har lagts till i databasen"
@@ -96,4 +100,4 @@ class addMovie extends Component {
     }
 }
 
-export default addMovie;
+export default withRouter(AddMovie);

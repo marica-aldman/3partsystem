@@ -29,9 +29,9 @@
     "price": {
       "type": "decimal"
     },
-    "moviedates": {
+    "dates": {
       "via": "movie",
-      "collection": "moviedate"
+      "collection": "dates"
     }
   }
 }

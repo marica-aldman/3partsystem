@@ -40,18 +40,22 @@ class AdminLogin extends Component {
 
     handleSubmitLogin(e) {
         e.preventDefault()
-
+        console.log("here")
         axios
             .post('http://localhost:1337/auth/local', {
                 identifier: this.state.username,
                 password: this.state.password,
             })
             .then(res => {
-                console.log("Logged in");
+                console.log("here2")
                 this.setState({ failedLogin: false });
-                this.props.changeUser(res.data.jwt);
+                this.props.changeUserAuth(res.data.jwt);
+                this.props.changeUser(res.data.user.id);
+                this.props.changeUserGroup(res.data.user.role.name);
+                this.props.changeShow(true);
             })
             .catch(error => {
+                console.log("here3")
                 console.log(error);
                 var failedLoginError = "Lösenordet eller användarnamnet är inkorrekt.";
                 this.setState({ failedLogin: true, error: failedLoginError });
@@ -70,7 +74,9 @@ class AdminLogin extends Component {
             })
             .then(res => {
                 this.setState({ failedRegistration: false });
-                this.props.userChange(res.data.jwt);
+                this.props.changeUserAuth(res.data.jwt);
+                this.props.changeUser(res.data.user.id);
+                this.props.changeShow(true);
             })
             .catch(error => {
                 console.log(error);
@@ -85,9 +91,6 @@ class AdminLogin extends Component {
                 {this.state.login &&
                     <div>
                         <form onSubmit={this.handleSubmitLogin.bind(this)}>
-                            <div>
-                                Logga in:
-                            </div>
                             {this.state.failedLogin && <div>
                                 {this.state.error}
                             </div>
@@ -96,13 +99,15 @@ class AdminLogin extends Component {
                                 Användarnamn:
                             </div>
                             <div>
-                                <input type={"text"} placeholder={"username"} onChange={this.handleChangeUsername.bind(this)}></input>
+                                {this.props.aUser && <input type={"text"} placeholder={"username"} onChange={this.handleChangeUsername.bind(this)}></input>}
+                                {!this.props.aUser && <input type={"text"} placeholder={"username"} onChange={this.handleChangeUsername.bind(this)}></input>}
                             </div>
                             <div>
                                 Lösenord:
                             </div>
                             <div>
-                                <input type={"password"} placeholder={"password"} onChange={this.handleChangePassword.bind(this)}></input>
+                                {this.props.aUser && <input type={"password"} placeholder={"password"} onChange={this.handleChangePassword.bind(this)}></input>}
+                                {!this.props.aUser && <input type={"password"} placeholder={"password"} onChange={this.handleChangePassword.bind(this)}></input>}
                             </div>
                             <div>
                                 <button type={"submit"} onClick={this.handleSubmitLogin.bind(this)}>Logga in</button>
@@ -110,11 +115,14 @@ class AdminLogin extends Component {
                         </form>
                         <div>
                             Har du inget ett konto?
+                        </div>
+                        <div>
                             <button type={"submit"} name="changeregister" onClick={this.handleRegisterState.bind(this)}>Registera dig</button>
                         </div>
                     </div>
                 }
-                {!this.state.login &&
+                {
+                    !this.state.login &&
                     <div>
                         <form onSubmit={this.handleSubmitRegister.bind(this)}>
                             <div>
@@ -128,19 +136,22 @@ class AdminLogin extends Component {
                                 Användarnamn:
                         </div>
                             <div>
-                                <input type={"text"} placeholder={"username"} onChange={this.handleChangeUsername.bind(this)}></input>
+                                {this.props.aUser && <input type={"text"} placeholder={"username"} onChange={this.handleChangeUsername.bind(this)}></input>}
+                                {!this.props.aUser && <input type={"text"} placeholder={"username"} onChange={this.handleChangeUsername.bind(this)}></input>}
                             </div>
                             <div>
                                 Email:
                         </div>
                             <div>
-                                <input type={"email"} placeholder={"username"} onChange={this.handleChangeEmail.bind(this)}></input>
+                                {this.props.aUser && <input type={"email"} placeholder={"username"} onChange={this.handleChangeEmail.bind(this)}></input>}
+                                {!this.props.aUser && <input type={"email"} placeholder={"username"} onChange={this.handleChangeEmail.bind(this)}></input>}
                             </div>
                             <div>
                                 Lösenord:
-                        </div>
+                            </div>
                             <div>
-                                <input type={"password"} placeholder={"password"} onChange={this.handleChangePassword.bind(this)}></input>
+                                {this.props.aUser && <input type={"password"} placeholder={"password"} onChange={this.handleChangePassword.bind(this)}></input>}
+                                {!this.props.aUser && <input type={"password"} placeholder={"password"} onChange={this.handleChangePassword.bind(this)}></input>}
                             </div>
                             <div>
                                 <button type={"submit"} onClick={this.handleSubmitRegister.bind(this)}>Registera</button>
@@ -148,12 +159,14 @@ class AdminLogin extends Component {
                         </form>
                         <div>
                             Har du redan ett konto?
-                        <button type={"submit"} onClick={this.handleLoginState.bind(this)}>Logga in istället</button>
+                        </div>
+                        <div>
+                            <button type={"submit"} onClick={this.handleLoginState.bind(this)}>Logga in istället</button>
                         </div>
                     </div>
                 }
 
-            </div>
+            </div >
         )
     }
 }

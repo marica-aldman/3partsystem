@@ -187,12 +187,12 @@ class HandleShedule extends Component {
                 var monthCase = 0;
                 var leap = false;
 
-                if (thisMonth == 1 || thisMonth == 3 || thisMonth == 5 || thisMonth == 7 || thisMonth == 8 || thisMonth == 10 || thisMonth == 12) {
+                if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 24) {
                         endOfMonth = true;
                         monthCase = 1;
                     }
-                } else if (thisMonth == 2) {
+                } else if (thisMonth === 2) {
                     if ((thisYear % 100 ? thisYear % 400 : thisYear % 4)) {
                         leap = true;
                     }
@@ -296,6 +296,8 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 6;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 7;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
                         case 2:
@@ -380,6 +382,8 @@ class HandleShedule extends Component {
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 6;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 7;
                                         break;
+                                    default:
+                                        break;
                                 }
                             } else {
                                 switch (thisDay) {
@@ -461,6 +465,8 @@ class HandleShedule extends Component {
                                         friday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 5;
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 6;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 7;
+                                        break;
+                                    default:
                                         break;
                                 }
                             }
@@ -548,7 +554,11 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 6;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 7;
                                     break;
+                                default:
+                                    break;
                             }
+                            break;
+                        default:
                             break;
                     }
                 } else {
@@ -568,12 +578,12 @@ class HandleShedule extends Component {
                 var monthCase = 0;
                 var leap = false;
 
-                if (thisMonth == 1 || thisMonth == 3 || thisMonth == 5 || thisMonth == 7 || thisMonth == 8 || thisMonth == 10 || thisMonth == 12) {
+                if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 18) {
                         endOfMonth = true;
                         monthCase = 1;
                     }
-                } else if (thisMonth == 2) {
+                } else if (thisMonth === 2) {
                     if ((thisYear % 100 ? thisYear % 400 : thisYear % 4)) {
                         leap = true;
                     }
@@ -743,6 +753,8 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 12;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 13;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
                         case 2:
@@ -893,6 +905,8 @@ class HandleShedule extends Component {
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 12;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 13;
                                         break;
+                                    default:
+                                        break;
                                 }
                             } else {
                                 switch (thisDay) {
@@ -1040,6 +1054,8 @@ class HandleShedule extends Component {
                                         friday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 11;
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 12;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 13;
+                                        break;
+                                    default:
                                         break;
                                 }
                             }
@@ -1193,6 +1209,8 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 12;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 13;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
                     }
@@ -1213,12 +1231,12 @@ class HandleShedule extends Component {
                 var monthCase = 0;
                 var leap = false;
 
-                if (thisMonth == 1 || thisMonth == 3 || thisMonth == 5 || thisMonth == 7 || thisMonth == 8 || thisMonth == 10 || thisMonth == 12) {
+                if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 19) {
                         endOfMonth = true;
                         monthCase = 1;
                     }
-                } else if (thisMonth == 2) {
+                } else if (thisMonth === 2) {
                     if ((thisYear % 100 ? thisYear % 400 : thisYear % 4)) {
                         leap = true;
                     }
@@ -1377,6 +1395,8 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 11;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 12;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
                         case 2:
@@ -1516,6 +1536,8 @@ class HandleShedule extends Component {
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 11;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 12;
                                         break;
+                                    default:
+                                        break;
                                 }
                             } else {
                                 switch (thisDay) {
@@ -1652,6 +1674,8 @@ class HandleShedule extends Component {
                                         friday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 10;
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 11;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 12;
+                                        break;
+                                    default:
                                         break;
                                 }
                             }
@@ -1794,6 +1818,8 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 11;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 12;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
                     }
@@ -1814,12 +1840,12 @@ class HandleShedule extends Component {
                 var monthCase = 0;
                 var leap = false;
 
-                if (thisMonth == 1 || thisMonth == 3 || thisMonth == 5 || thisMonth == 7 || thisMonth == 8 || thisMonth == 10 || thisMonth == 12) {
+                if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 20) {
                         endOfMonth = true;
                         monthCase = 1;
                     }
-                } else if (thisMonth == 2) {
+                } else if (thisMonth === 2) {
                     if ((thisYear % 100 ? thisYear % 400 : thisYear % 4)) {
                         leap = true;
                     }
@@ -1967,6 +1993,8 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 10;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 11;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
                         case 2:
@@ -2095,6 +2123,8 @@ class HandleShedule extends Component {
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 10;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 11;
                                         break;
+                                    default:
+                                        break;
                                 }
                             } else {
                                 switch (thisDay) {
@@ -2220,6 +2250,8 @@ class HandleShedule extends Component {
                                         friday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 9;
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 10;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 11;
+                                        break;
+                                    default:
                                         break;
                                 }
                             }
@@ -2351,6 +2383,8 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 10;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 11;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
                     }
@@ -2371,12 +2405,12 @@ class HandleShedule extends Component {
                 var monthCase = 0;
                 var leap = false;
 
-                if (thisMonth == 1 || thisMonth == 3 || thisMonth == 5 || thisMonth == 7 || thisMonth == 8 || thisMonth == 10 || thisMonth == 12) {
+                if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 21) {
                         endOfMonth = true;
                         monthCase = 1;
                     }
-                } else if (thisMonth == 2) {
+                } else if (thisMonth === 2) {
                     if ((thisYear % 100 ? thisYear % 400 : thisYear % 4)) {
                         leap = true;
                     }
@@ -2513,6 +2547,8 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 9;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 10;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
                         case 2:
@@ -2630,6 +2666,8 @@ class HandleShedule extends Component {
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 9;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 10;
                                         break;
+                                    default:
+                                        break;
                                 }
                             } else {
                                 switch (thisDay) {
@@ -2744,6 +2782,8 @@ class HandleShedule extends Component {
                                         friday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 8;
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 9;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 10;
+                                        break;
+                                    default:
                                         break;
                                 }
                             }
@@ -2884,12 +2924,12 @@ class HandleShedule extends Component {
                 var monthCase = 0;
                 var leap = false;
 
-                if (thisMonth == 1 || thisMonth == 3 || thisMonth == 5 || thisMonth == 7 || thisMonth == 8 || thisMonth == 10 || thisMonth == 12) {
+                if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 22) {
                         endOfMonth = true;
                         monthCase = 1;
                     }
-                } else if (thisMonth == 2) {
+                } else if (thisMonth === 2) {
                     if ((thisYear % 100 ? thisYear % 400 : thisYear % 4)) {
                         leap = true;
                     }
@@ -3015,6 +3055,8 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 8;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 9;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
                         case 2:
@@ -3121,6 +3163,8 @@ class HandleShedule extends Component {
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 8;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 9;
                                         break;
+                                    default:
+                                        break;
                                 }
                             } else {
                                 switch (thisDay) {
@@ -3224,6 +3268,8 @@ class HandleShedule extends Component {
                                         friday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 7;
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 8;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 9;
+                                        break;
+                                    default:
                                         break;
                                 }
                             }
@@ -3353,12 +3399,12 @@ class HandleShedule extends Component {
                 var monthCase = 0;
                 var leap = false;
 
-                if (thisMonth == 1 || thisMonth == 3 || thisMonth == 5 || thisMonth == 7 || thisMonth == 8 || thisMonth == 10 || thisMonth == 12) {
+                if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 23) {
                         endOfMonth = true;
                         monthCase = 1;
                     }
-                } else if (thisMonth == 2) {
+                } else if (thisMonth === 2) {
                     if ((thisYear % 100 ? thisYear % 400 : thisYear % 4)) {
                         leap = true;
                     }
@@ -3473,6 +3519,8 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 7;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 8;
                                     break;
+                                default:
+                                    break;
                             }
                             break;
                         case 2:
@@ -3568,6 +3616,8 @@ class HandleShedule extends Component {
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 7;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 8;
                                         break;
+                                    default:
+                                        break;
                                 }
                             } else {
                                 switch (thisDay) {
@@ -3660,6 +3710,8 @@ class HandleShedule extends Component {
                                         friday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 6;
                                         saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 7;
                                         sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 8;
+                                        break;
+                                    default:
                                         break;
                                 }
                             }
@@ -3757,6 +3809,8 @@ class HandleShedule extends Component {
                                     friday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 6;
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 7;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 8;
+                                    break;
+                                default:
                                     break;
                             }
                             break;

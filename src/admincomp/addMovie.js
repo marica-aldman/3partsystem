@@ -56,7 +56,7 @@ class AddMovie extends Component {
 
     render() {
 
-        if (this.props.aUserGroup != "admin") {
+        if (this.props.aUserGroup !== "admin") {
             return (<Redirect to="/" />)
         }
         let divtext;

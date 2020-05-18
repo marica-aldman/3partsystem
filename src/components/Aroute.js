@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
+import firebase from './FirebaseConfig';
 import "../styles/_main.scss"
 import Main from "./Main";
 import Movie from "./Movie";
@@ -36,6 +37,7 @@ class Aroute extends Component {
         this.setState({ user: e })
         localStorage.setItem('u', this.state.user)
     }
+
     changeUserAuth = (e) => {
         this.setState({ userAuth: e });
         localStorage.setItem('ua', this.state.userAuth)
@@ -54,9 +56,10 @@ class Aroute extends Component {
             < BrowserRouter >
                 <Nav aUser={this.state.user} aUserGroup={this.state.userGroup} changeUser={this.changeUser} changeUserAuth={this.changeUserAuth} changeUserGroup={this.changeUserGroup} />
                 {(this.state.userGroup === "admin" || localStorage.getItem('ug') === "admin") && <AdminNav aUser={this.state.user} aUserGroup={this.state.userGroup} />}
-                {(this.state.userGroup === "Authenticated" || localStorage.getItem('ug') === "Authenticated") && <CustomerNav aUser={this.state.user} aUserGroup={this.state.userGroup} />}
+                {(this.state.userGroup === "Customer" || localStorage.getItem('ug') === "Customer") && <CustomerNav aUser={this.state.user} aUserGroup={this.state.userGroup} />}
                 <Route path="/bookings" exact component={() => <Bookings aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
-                <Route path="/Admin" exact component={() => <AdminView aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
+                <Route path="/Admin" exact component={() => <AdminView aUser={this.state.user}
+                    changeUser={this.changeUser} changeUserAuth={this.changeUserAuth} changeUserGroup={this.changeUserGroup} />}></Route>
                 <Route path="/mod/movies" exact component={() => <HandleMovies aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
                 <Route path="/mod/editMovie" exact component={() => <EditMovie aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
                 <Route path="/mod/addMovie" exact component={() => <AddMovie aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>

@@ -68,7 +68,7 @@ class Nav extends Component {
                             </Link>
                         </li>
                     }
-                    {this.props.aUser &&
+                    {(this.props.aUser || localStorage.getItem('u')) &&
                         <li className={"login"}>
                             <form onSubmit={this.handleOnclickLogout}>
                                 <button onClick={this.handleOnclickLogout}>{this.state.logoutButtonText}</button>

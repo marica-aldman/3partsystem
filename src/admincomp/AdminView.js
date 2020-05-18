@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AdminProfile from '../auth/AdminProfile';
 import { Redirect } from "react-router-dom";
+import AdminLogin from '../auth/AdminLogin';
 
 class AdminView extends Component {
     constructor(props) {
@@ -10,13 +11,15 @@ class AdminView extends Component {
     }
 
     render() {
-
-        if (this.props.aUserGroup != "admin") {
-            return (<Redirect to="/" />)
-        }
         return (
             <div>
-                <AdminProfile user={this.props.aUser} />
+                {
+                    this.props.aUser ?
+                        <AdminProfile user={this.props.aUser} />
+                        :
+                        <AdminLogin
+                            aUser={this.props.aUser}
+                            changeUser={this.props.changeUser} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} />}
             </div>
         )
     }

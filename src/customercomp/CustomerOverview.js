@@ -7,6 +7,7 @@ class CustomerOverview extends Component {
         super(props);
 
         this.state = {
+            loggedIn: this.props.aUser || localStorage.getItem('u'),
             user: null || localStorage.getItem('u'),
             displayName: "",
         }
@@ -18,13 +19,10 @@ class CustomerOverview extends Component {
     }
 
     render() {
-        console.log(this.state.user)
-        const loggedIn = this.state.user || localStorage.getItem('u');
-        console.log(this.state.user)
         return (
             <div>
                 {
-                    !loggedIn ? <UserLogin userCredentrial={this.userCredentrial} showDisplayName={this.showDisplayName} /> : <UserProfile userData={this.state.user} />
+                    !this.state.loggedIn ? <UserLogin changeUser={this.props.changeUser} changeUserName={this.props.changeUserName} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} aUser={this.props.aUser} /> : <UserProfile userData={this.state.user} />
                 }
             </div>
         )

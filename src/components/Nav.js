@@ -81,7 +81,7 @@ class Nav extends Component {
                                 <button className={this.state.toggleLogin ? "selected" : "deselected"} onClick={this.handleOnclickLogin}>{this.state.loginButtonText}</button>
                             </form>
                             {this.state.toggleLogin &&
-                                <LoginForm changeShow={this.changeShow} aUser={this.props.aUser} changeUser={this.props.changeUser} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} />}
+                                <LoginForm changeShow={this.changeShow} aUser={this.props.aUser} changeUser={this.props.changeUser} changeUserName={this.props.changeUserName} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} />}
                         </li>
                     }
                 </ul>

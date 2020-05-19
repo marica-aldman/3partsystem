@@ -155,6 +155,9 @@ class HandleShedule extends Component {
         var thisYear = new Date();
         var thisMonth = new Date();
         var thisDay = new Date();
+        var endOfMonth = false;
+        var monthCase = 0;
+        var leap = false;
 
         if (lastDate) {
             var theDate = lastDate.split("-");
@@ -176,6 +179,8 @@ class HandleShedule extends Component {
         var friday = "";
         var saturday = "";
         var sunday = "";
+        var extra1 = "";
+        var extra2 = "";
 
 
         // next week starting mondays
@@ -183,9 +188,9 @@ class HandleShedule extends Component {
             case 0:
                 //sunday
                 // monday is today + 1
-                var endOfMonth = false;
-                var monthCase = 0;
-                var leap = false;
+                endOfMonth = false;
+                monthCase = 0;
+                leap = false;
 
                 if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 24) {
@@ -209,8 +214,8 @@ class HandleShedule extends Component {
                         monthCase = 3;
                     }
                 }
-                var extra1 = "";
-                var extra2 = "";
+                extra1 = "";
+                extra2 = "";
                 thisMonth < 10 ? extra1 = "0" : extra1 = "";
                 thisDay < 10 ? extra2 = "0" : extra2 = "";
                 if (endOfMonth) {
@@ -574,9 +579,9 @@ class HandleShedule extends Component {
             case 1:
                 //monday
                 // monday is today + 7
-                var endOfMonth = false;
-                var monthCase = 0;
-                var leap = false;
+                endOfMonth = false;
+                monthCase = 0;
+                leap = false;
 
                 if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 18) {
@@ -600,8 +605,8 @@ class HandleShedule extends Component {
                         monthCase = 3;
                     }
                 }
-                var extra1 = "";
-                var extra2 = "";
+                extra1 = "";
+                extra2 = "";
                 thisMonth < 10 ? extra1 = "0" : extra1 = "";
                 thisDay < 10 ? extra2 = "0" : extra2 = "";
                 if (endOfMonth) {
@@ -1213,6 +1218,8 @@ class HandleShedule extends Component {
                                     break;
                             }
                             break;
+                        default:
+                            break;
                     }
                 } else {
                     monday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + (thisDay + 7);
@@ -1227,9 +1234,9 @@ class HandleShedule extends Component {
             case 2:
                 //tuesday
                 // monday is today + 6
-                var endOfMonth = false;
-                var monthCase = 0;
-                var leap = false;
+                endOfMonth = false;
+                monthCase = 0;
+                leap = false;
 
                 if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 19) {
@@ -1253,8 +1260,8 @@ class HandleShedule extends Component {
                         monthCase = 3;
                     }
                 }
-                var extra1 = "";
-                var extra2 = "";
+                extra1 = "";
+                extra2 = "";
                 thisMonth < 10 ? extra1 = "0" : extra1 = "";
                 thisDay < 10 ? extra2 = "0" : extra2 = "";
                 if (endOfMonth) {
@@ -1822,6 +1829,8 @@ class HandleShedule extends Component {
                                     break;
                             }
                             break;
+                        default:
+                            break;
                     }
                 } else {
                     monday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + (thisDay + 6);
@@ -1836,9 +1845,9 @@ class HandleShedule extends Component {
             case 3:
                 //wednesday
                 // monday is today + 5
-                var endOfMonth = false;
-                var monthCase = 0;
-                var leap = false;
+                endOfMonth = false;
+                monthCase = 0;
+                leap = false;
 
                 if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 20) {
@@ -1862,8 +1871,8 @@ class HandleShedule extends Component {
                         monthCase = 3;
                     }
                 }
-                var extra1 = "";
-                var extra2 = "";
+                extra1 = "";
+                extra2 = "";
                 thisMonth < 10 ? extra1 = "0" : extra1 = "";
                 thisDay < 10 ? extra2 = "0" : extra2 = "";
                 if (endOfMonth) {
@@ -2387,6 +2396,8 @@ class HandleShedule extends Component {
                                     break;
                             }
                             break;
+                        default:
+                            break;
                     }
                 } else {
                     monday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + (thisDay + 5);
@@ -2401,9 +2412,9 @@ class HandleShedule extends Component {
             case 4:
                 //thursday
                 // monday is today + 4
-                var endOfMonth = false;
-                var monthCase = 0;
-                var leap = false;
+                endOfMonth = false;
+                monthCase = 0;
+                leap = false;
 
                 if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 21) {
@@ -2427,8 +2438,8 @@ class HandleShedule extends Component {
                         monthCase = 3;
                     }
                 }
-                var extra1 = "";
-                var extra2 = "";
+                extra1 = "";
+                extra2 = "";
                 thisMonth < 10 ? extra1 = "0" : extra1 = "";
                 thisDay < 10 ? extra2 = "0" : extra2 = "";
                 if (endOfMonth) {
@@ -2904,7 +2915,11 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 9;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 10;
                                     break;
+                                default:
+                                    break;
                             }
+                            break;
+                        default:
                             break;
                     }
                 } else {
@@ -2920,9 +2935,9 @@ class HandleShedule extends Component {
             case 5:
                 //friday
                 // monday is today + 3
-                var endOfMonth = false;
-                var monthCase = 0;
-                var leap = false;
+                endOfMonth = false;
+                monthCase = 0;
+                leap = false;
 
                 if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 22) {
@@ -2946,8 +2961,8 @@ class HandleShedule extends Component {
                         monthCase = 3;
                     }
                 }
-                var extra1 = "";
-                var extra2 = "";
+                extra1 = "";
+                extra2 = "";
                 thisMonth < 10 ? extra1 = "0" : extra1 = "";
                 thisDay < 10 ? extra2 = "0" : extra2 = "";
                 if (endOfMonth) {
@@ -3379,7 +3394,11 @@ class HandleShedule extends Component {
                                     saturday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 8;
                                     sunday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + 9;
                                     break;
+                                default:
+                                    break;
                             }
+                            break;
+                        default:
                             break;
                     }
                 } else {
@@ -3395,9 +3414,9 @@ class HandleShedule extends Component {
             case 6:
                 //saturday
                 // monday is today + 2
-                var endOfMonth = false;
-                var monthCase = 0;
-                var leap = false;
+                endOfMonth = false;
+                monthCase = 0;
+                leap = false;
 
                 if (thisMonth === 1 || thisMonth === 3 || thisMonth === 5 || thisMonth === 7 || thisMonth === 8 || thisMonth === 10 || thisMonth === 12) {
                     if (thisDay > 23) {
@@ -3421,8 +3440,8 @@ class HandleShedule extends Component {
                         monthCase = 3;
                     }
                 }
-                var extra1 = "";
-                var extra2 = "";
+                extra1 = "";
+                extra2 = "";
                 thisMonth < 10 ? extra1 = "0" : extra1 = "";
                 thisDay < 10 ? extra2 = "0" : extra2 = "";
                 if (endOfMonth) {
@@ -3814,6 +3833,8 @@ class HandleShedule extends Component {
                                     break;
                             }
                             break;
+                        default:
+                            break;
                     }
                 } else {
                     monday = thisYear + "-" + extra1 + thisMonth + "-" + extra2 + (thisDay + 2);
@@ -4037,7 +4058,7 @@ class HandleShedule extends Component {
 
     render() {
 
-        if (this.props.aUserGroup != "admin") {
+        if (this.props.aUserGroup !== "admin") {
             return (<Redirect to="/" />)
         }
         return (

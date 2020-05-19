@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import AdminProfile from '../auth/AdminProfile';
-import { Redirect } from "react-router-dom";
 import AdminLogin from '../auth/AdminLogin';
 
 class AdminView extends Component {
@@ -19,7 +18,9 @@ class AdminView extends Component {
                         :
                         <AdminLogin
                             aUser={this.props.aUser}
-                            changeUser={this.props.changeUser} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} />}
+                            changeUser={this.props.changeUser}
+                            changeUserName={this.props.changeUserName}
+                            changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} />}
             </div>
         )
     }

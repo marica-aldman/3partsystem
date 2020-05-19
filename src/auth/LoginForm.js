@@ -8,25 +8,10 @@ class LoginForm extends Component {
 
         this.state = {
             login: true,
-            username: "",
-            email: "",
-            password: "",
             failedLogin: false,
             failedRegistration: false,
             error: "",
         }
-    }
-
-    handleChangeUsername(e) {
-        this.setState({ username: e.target.value })
-    }
-
-    handleChangeEmail(e) {
-        this.setState({ email: e.target.value })
-    }
-
-    handleChangePassword(e) {
-        this.setState({ password: e.target.value })
     }
 
     handleRegisterState(e) {
@@ -48,6 +33,7 @@ class LoginForm extends Component {
             .signInWithEmailAndPassword(email, password).then(res => {
                 this.setState({ failedLogin: false });
                 this.props.changeUser(res.user.email);
+                this.props.changeUserName(res.user.displayName);
                 this.props.changeUserGroup('Customer');
                 this.props.changeShow(true);
                 this.props.history.push("/CustomerOverview");
@@ -60,18 +46,19 @@ class LoginForm extends Component {
 
     onSubmitRegister(e) {
         e.preventDefault();
+        const username = e.target.elements.name.value;
         const email = e.target.elements.email.value;
         const password = e.target.elements.password.value;
         firebase.auth()
             .createUserWithEmailAndPassword(email, password)
             .then((res) => {
-                this.setState({ failedLogin: false });
+                res.user.updateProfile({ displayName: username });
                 this.props.changeUser(res.user.email);
-                this.props.changeUserGroup('Customer');
+                this.props.changeUserName(res.user.displayName);
+                this.props.changeUserGroup("Customer");
                 this.props.changeShow(true);
                 this.props.history.push("/CustomerOverview");
-            })
-            .catch(error => {
+            }).catch((error) => {
                 console.log(error);
                 var failedRegistrationError = "Registrering misslyckades.";
                 this.setState({ failedRegistration: true, error: failedRegistrationError });
@@ -92,15 +79,15 @@ class LoginForm extends Component {
                                 Email:
                             </div>
                             <div>
-                                {this.props.aUser && <input type={"text"} placeholder={"username"} name={"email"} onChange={this.handleChangeUsername.bind(this)}></input>}
-                                {!this.props.aUser && <input type={"text"} placeholder={"username"} name={"email"} onChange={this.handleChangeUsername.bind(this)}></input>}
+                                {this.props.aUser && <input type={"text"} placeholder={"username"} name={"email"} ></input>}
+                                {!this.props.aUser && <input type={"text"} placeholder={"username"} name={"email"} ></input>}
                             </div>
                             <div>
                                 Lösenord:
                             </div>
                             <div>
-                                {this.props.aUser && <input type={"password"} placeholder={"password"} onChange={this.handleChangePassword.bind(this)}></input>}
-                                {!this.props.aUser && <input type={"password"} placeholder={"password"} name={"password"} onChange={this.handleChangePassword.bind(this)}></input>}
+                                {this.props.aUser && <input type={"password"} placeholder={"password"} ></input>}
+                                {!this.props.aUser && <input type={"password"} placeholder={"password"} name={"password"} ></input>}
                             </div>
                             <div>
                                 <button type={"submit"}>Logga in</button>
@@ -129,15 +116,15 @@ class LoginForm extends Component {
                                 Email:
                         </div>
                             <div>
-                                {this.props.aUser && <input type={"email"} placeholder={"username"} name={"email"} onChange={this.handleChangeEmail.bind(this)}></input>}
-                                {!this.props.aUser && <input type={"email"} placeholder={"username"} name={"email"} onChange={this.handleChangeEmail.bind(this)}></input>}
+                                {this.props.aUser && <input type={"email"} placeholder={"username"} name={"email"}></input>}
+                                {!this.props.aUser && <input type={"email"} placeholder={"username"} name={"email"} ></input>}
                             </div>
                             <div>
                                 Lösenord:
                             </div>
                             <div>
-                                {this.props.aUser && <input type={"password"} placeholder={"password"} name={"password"} onChange={this.handleChangePassword.bind(this)}></input>}
-                                {!this.props.aUser && <input type={"password"} placeholder={"password"} name={"password"} onChange={this.handleChangePassword.bind(this)}></input>}
+                                {this.props.aUser && <input type={"password"} placeholder={"password"} name={"password"} ></input>}
+                                {!this.props.aUser && <input type={"password"} placeholder={"password"} name={"password"} ></input>}
                             </div>
                             <div>
                                 <button type={"submit"}>Registera</button>

@@ -49,6 +49,11 @@ class CustomerNav extends Component {
             <nav className={"second-menu"} >
                 <ul>
                     <li key={"bookings"}>
+                        <Link to="/CustomerOverview">
+                            <button className={""}>Profil</button>
+                        </Link>
+                    </li>
+                    <li key={"bookings"}>
                         <Link to="/bookings">
                             <button className={""}>Bokningar</button>
                         </Link>

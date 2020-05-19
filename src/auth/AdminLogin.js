@@ -51,6 +51,7 @@ class AdminLogin extends Component {
                 this.setState({ failedLogin: false });
                 this.props.changeUserAuth(res.data.jwt);
                 this.props.changeUser(res.data.user.id);
+                this.props.changeUserName(res.data.user.username);
                 this.props.changeUserGroup(res.data.user.role.name);
                 this.props.changeShow(true);
             })
@@ -76,6 +77,7 @@ class AdminLogin extends Component {
                 this.setState({ failedRegistration: false });
                 this.props.changeUserAuth(res.data.jwt);
                 this.props.changeUser(res.data.user.id);
+                this.props.changeUserName(res.data.user.username);
                 this.props.changeShow(true);
             })
             .catch(error => {

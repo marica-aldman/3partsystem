@@ -105,7 +105,7 @@ class EditMovie extends Component {
                             </div>
                             <div>Bild</div>
                             <div className={"addFormInput"}>
-                                <img src={"http://localhost:1337" + this.state.movie[0].image[0].formats.thumbnail.url} className={"mini-pic"} />
+                                <img src={"http://localhost:1337" + this.state.movie[0].image[0].formats.thumbnail.url} alt={"Movie thumbnail"} className={"mini-pic"} />
                                 <input type="file" name="imageFile" onChange={this.eventChangeImage.bind(this)}></input>
                             </div>
                             <div>Beskrivning</div>

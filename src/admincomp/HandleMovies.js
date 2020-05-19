@@ -67,7 +67,7 @@ class HandleMovies extends Component {
                             {this.state.movies && this.state.movies.map((movie) =>
                                 <tr>
                                     <td>
-                                        <img src={"http://localhost:1337" + movie.image[0].formats.thumbnail.url} className={"MovieList"} />
+                                        <img src={"http://localhost:1337" + movie.image[0].formats.thumbnail.url} alt={"Movie thumbnail"} className={"MovieList"} />
                                     </td>
                                     <td>
                                         {movie.title}

@@ -37,7 +37,7 @@ class Bookings extends Component {
       }
 
       render() {
-            if (this.props.aUserGroup != 'Authenticated') {
+            if (this.props.aUserGroup !== 'Customer') {
                   return (<Redirect to="/" />)
             }
             return (

@@ -7,7 +7,9 @@ class UserLogin extends Component {
 
         this.state = {
             condition: true,
-            user: ""
+            failedLogin: false,
+            failedRegistration: false,
+            error: "",
         }
     }
 
@@ -26,20 +28,32 @@ class UserLogin extends Component {
         const password = e.target.elements.password.value;
         firebase.auth()
             .signInWithEmailAndPassword(email, password).then(res => {
-                this.props.userCredentrial(res.user.email);
-            }).catch((error) => {
-                console.log(error)
+                this.props.changeUser(res.user.email);
+                this.props.changeUserName(res.user.displayName);
+                this.props.changeUserGroup("Customer");
+            }).catch(error => {
+                console.log(error);
+                var failedLoginError = "Lösenordet eller användarnamnet är inkorrekt.";
+                this.setState({ failedLogin: true, error: failedLoginError });
             })
     }
 
     onSubmitRegister(e) {
         e.preventDefault();
+        const username = e.target.elements.name.value;
         const email = e.target.elements.email.value;
         const password = e.target.elements.password.value;
         firebase.auth()
             .createUserWithEmailAndPassword(email, password)
             .then((res) => {
-                this.props.userCredentrial(res.user.email);
+                res.user.updateProfile({ displayName: username });
+                this.props.changeUser(res.user.email);
+                this.props.changeUserName(res.user.displayName);
+                this.props.changeUserGroup("Customer");
+            }).catch((error) => {
+                console.log(error);
+                var failedRegistrationError = "Registrering misslyckades.";
+                this.setState({ failedRegistration: true, error: failedRegistrationError });
             })
     }
 
@@ -64,7 +78,8 @@ class UserLogin extends Component {
                     !this.state.condition && <div>
                         <h2>Registrera dig</h2>
                         <form onSubmit={this.onSubmitRegister.bind(this)}>
-                            <div>Emailadress:</div>
+                            <div>Namn:</div>
+                            <input type="text" name="name"></input><div>Emailadress:</div>
                             <input type="email" name="email"></input>
                             <div>Lösenord:</div>
                             <input type="password" name="password"></input>

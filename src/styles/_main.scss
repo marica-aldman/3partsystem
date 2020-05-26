@@ -23,18 +23,21 @@ main {
                     border: 2px;
                 }
             }
-            button {
+            .formButton{
                 width: 8rem;
                 height: 2rem;
                 border: 1px solid rgb(75, 75, 253);
                 border-radius: 25px;
                 background-color: rgb(144, 144, 255);
             }
-            button:focus {
+            .formButton:focus {
                 outline: 0;
                 border: 2px solid rgb(75,75,253);
                 box-shadow: 5px 5px rgba(100, 100, 100, 0.288);
                 transition: .5s;
+            }
+            .gmailFacebook{
+                height: 220px;
             }
         }
         li:last-child {
@@ -102,6 +105,22 @@ main {
                 outline: 0;
                 button {
                     border: 2px;
+                }
+            }
+            .basket{
+                background-color: white;
+                td{
+                    text-align: center;
+                    .moreOrLess {
+                        width: 0.8rem;
+                        height: 0.8rem;
+                        margin: 0.2rem;
+                        border: 1px solid rgb(75, 75, 253);
+                        background-color: rgb(144, 144, 255);
+                        border-radius: 0;
+                        padding: auto;
+                        text-align: center;
+                    }
                 }
             }
             button {
@@ -395,4 +414,8 @@ main {
 
 table > thead > tbody > tfoot > tr > .showForm {
     display: initial !important;
+}
+
+main {
+    margin-top: 50px;
 }

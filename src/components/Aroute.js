@@ -20,6 +20,7 @@ import EditShedule from "../admincomp/EditShedule";
 
 import CustomerNav from "../customercomp/CustomerNav";
 import CustomerOverview from "../customercomp/CustomerOverview";
+import UserProfile from "../customercomp/UserProfile";
 import Bookings from "../customercomp/Bookings";
 class Aroute extends Component {
     constructor(props) {
@@ -59,6 +60,7 @@ class Aroute extends Component {
             userAuth: userA,
             userGroup: userG,
             userName: userN,
+            cart: null,
             movie: null || localStorage.getItem('movie'),
         }
     }
@@ -92,7 +94,7 @@ class Aroute extends Component {
             < BrowserRouter >
                 <Nav aUser={this.state.user} aUserGroup={this.state.userGroup} changeUser={this.changeUser} changeUserName={this.changeUserName} changeUserAuth={this.changeUserAuth} changeUserGroup={this.changeUserGroup} />
                 {(this.state.userGroup === "admin" || localStorage.getItem('ug') === "admin") && <AdminNav aUser={this.state.user} aUserGroup={this.state.userGroup} />}
-                {(this.state.userGroup === "Customer" || localStorage.getItem('ug') === "Customer") && <CustomerNav aUser={this.state.user} aUserGroup={this.state.userGroup} />}
+                {(this.state.userGroup === "Customer" || localStorage.getItem('ug') === "Customer" || localStorage.getItem("firebaseui::rememberedAccounts")) && <CustomerNav aUser={this.state.user} aUserGroup={this.state.userGroup} />}
                 <Route path="/bookings" exact component={() => <Bookings aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
                 <Route path="/Admin" exact component={() => <AdminView aUser={this.state.user}
                     changeUser={this.changeUser} changeUserName={this.changeUserName} changeUserAuth={this.changeUserAuth} changeUserGroup={this.changeUserGroup} />}></Route>
@@ -104,7 +106,7 @@ class Aroute extends Component {
                 <Route path="/mod/createShedule" exact component={() => <HandleShedule aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
                 <Route path="/mod/shedules" exact component={() => <Schedules aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
                 <Route path="/mod/editShedule" exact component={() => <EditShedule aUser={this.state.user} aUserGroup={this.state.userGroup} />}></Route>
-                <Route path="/CustomerOverview" exact component={() => <CustomerOverview aUser={this.state.user} aUserGroup={this.state.userGroup} changeUser={this.changeUser} changeUserName={this.changeUserName} changeUserAuth={this.changeUserAuth} changeUserGroup={this.changeUserGroup} />}></Route>
+                <Route path="/CustomerOverview" exact component={() => <CustomerOverview aUser={this.state.user} aUserGroup={this.state.userGroup} changeUser={this.changeUser} aUsername={this.state.userName} changeUserName={this.changeUserName} changeUserAuth={this.changeUserAuth} changeUserGroup={this.changeUserGroup} />}></Route><Route path="/profile" exact component={() => <UserProfile aUser={this.state.user} aUserGroup={this.state.userGroup} changeUser={this.changeUser} aUsername={this.state.userName} changeUserName={this.changeUserName} changeUserAuth={this.changeUserAuth} changeUserGroup={this.changeUserGroup} />}></Route>
                 <Route path="/movie/" exact component={() => <Movie aUser={this.state.user} aUserGroup={this.state.userGroup} movie={this.state.movie} />}></Route>
                 <Route path="/" exact component={() => <Main aUser={this.state.user} aUserGroup={this.state.userGroup} doChangeMovie={this.changeMovie} movie={this.state.movie} />}></Route>
             </BrowserRouter >

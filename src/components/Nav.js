@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import LoginForm from "../auth/LoginForm";
+import firebase from "../components/FirebaseConfig";
 
 
 class Nav extends Component {
@@ -35,6 +36,7 @@ class Nav extends Component {
         this.props.changeUser(null);
         this.props.changeUserAuth(null);
         this.props.changeUserGroup(null);
+        firebase.auth().signOut();
         localStorage.clear();
         window.location.reload(false);
     }
@@ -51,34 +53,34 @@ class Nav extends Component {
                     </li>
                     <li>
                         <Link to="/">
-                            <button className={""}>Program</button>
+                            <button className={"formButton"}>Program</button>
                         </Link>
                     </li>
                     {(this.props.aUserGroup === "admin") &&
                         <li>
                             <Link to="/Admin">
-                                <button className={""}>Översikt</button>
+                                <button className={"formButton"}>Översikt</button>
                             </Link>
                         </li>
                     }
                     {(this.props.aUserGroup === "Authenticated") &&
                         <li>
                             <Link to="/CustomerOverview">
-                                <button className={""}>Översikt</button>
+                                <button className={"formButton"}>Översikt</button>
                             </Link>
                         </li>
                     }
-                    {(this.props.aUser || localStorage.getItem('u')) &&
+                    {(this.props.aUser || localStorage.getItem('u') || localStorage.getItem("firebaseui::rememberedAccounts")) &&
                         <li className={"login"}>
                             <form onSubmit={this.handleOnclickLogout}>
-                                <button onClick={this.handleOnclickLogout}>{this.state.logoutButtonText}</button>
+                                <button className={"formButton"} onClick={this.handleOnclickLogout}>{this.state.logoutButtonText}</button>
                             </form>
                         </li>
                     }
-                    {!this.props.aUser &&
+                    {(!this.props.aUser && !localStorage.getItem("firebaseui::rememberedAccounts")) &&
                         <li>
                             <form onSubmit={this.handleOnclickLogin}>
-                                <button className={this.state.toggleLogin ? "selected" : "deselected"} onClick={this.handleOnclickLogin}>{this.state.loginButtonText}</button>
+                                <button className={this.state.toggleLogin ? "selected, formButton" : "deselected, formButton"} onClick={this.handleOnclickLogin}>{this.state.loginButtonText}</button>
                             </form>
                             {this.state.toggleLogin &&
                                 <LoginForm changeShow={this.changeShow} aUser={this.props.aUser} changeUser={this.props.changeUser} changeUserName={this.props.changeUserName} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} />}

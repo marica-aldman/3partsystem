@@ -25,10 +25,6 @@
     "movie": {
       "model": "movie",
       "via": "dates"
-    },
-    "tickets": {
-      "collection": "tickets",
-      "via": "theDate"
     }
   }
 }

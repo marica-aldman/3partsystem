@@ -1,3 +1,5 @@
 .env
-NewFolder/*
-marica_aldman.zip
+/node_modules/.cache/*
+build/*
+cmsserver.zip
+node_modules.zip

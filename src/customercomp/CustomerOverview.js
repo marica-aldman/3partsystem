@@ -22,7 +22,7 @@ class CustomerOverview extends Component {
         return (
             <div>
                 {
-                    !this.state.loggedIn ? <UserLogin changeUser={this.props.changeUser} changeUserName={this.props.changeUserName} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} aUser={this.props.aUser} /> : <UserProfile userData={this.state.user} />
+                    !this.state.loggedIn ? <UserLogin changeUser={this.props.changeUser} changeUserName={this.props.changeUserName} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} aUser={this.props.aUser} aUsername={this.state.userName} /> : <UserProfile aUsername={this.state.userName} userData={this.state.user} />
                 }
             </div>
         )

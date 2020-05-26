@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import firebase from "../components/FirebaseConfig";
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 class LoginForm extends Component {
     constructor(props) {
@@ -13,6 +14,19 @@ class LoginForm extends Component {
             error: "",
         }
     }
+
+
+    uiConfig = {
+        // Popup signin flow rather than redirect flow.
+        signInFlow: 'popup',
+        // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+        signInSuccessUrl: '/profile',
+        // We will display Google and Facebook as auth providers.
+        signInOptions: [
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        ]
+    };
 
     handleRegisterState(e) {
         e.preventDefault()
@@ -46,17 +60,23 @@ class LoginForm extends Component {
 
     onSubmitRegister(e) {
         e.preventDefault();
-        const username = e.target.elements.name.value;
+        const FirstName = e.target.elements.firstname.value;
+        const LastName = e.target.elements.lastname.value;
         const email = e.target.elements.email.value;
         const password = e.target.elements.password.value;
         firebase.auth()
             .createUserWithEmailAndPassword(email, password)
             .then((res) => {
-                res.user.updateProfile({ displayName: username });
+                res.user.updateProfile({ displayName: FirstName + " " + LastName })
+                const docRef = firebase.firestore().collection('userProfile').doc(res.user.$.W);
+                docRef.set({
+                    firstName: FirstName,
+                    lastName: LastName,
+                });
                 this.props.changeUser(res.user.email);
                 this.props.changeUserName(res.user.displayName);
                 this.props.changeUserGroup("Customer");
-                this.props.changeShow(true);
+                this.setState({ failedLogin: false });
                 this.props.history.push("/CustomerOverview");
             }).catch((error) => {
                 console.log(error);
@@ -90,14 +110,17 @@ class LoginForm extends Component {
                                 {!this.props.aUser && <input type={"password"} placeholder={"password"} name={"password"} ></input>}
                             </div>
                             <div>
-                                <button type={"submit"}>Logga in</button>
+                                <button className={"formButton"} type={"submit"}>Logga in</button>
                             </div>
                         </form>
+                        <div className={"gmailFacebook"}>
+                            <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />
+                        </div>
                         <div>
                             Har du inget ett konto?
                         </div>
                         <div>
-                            <button type={"submit"} name="changeregister" onClick={this.handleRegisterState.bind(this)}>Registera dig</button>
+                            <button type={"submit"} className={"formButton"} name="changeregister" onClick={this.handleRegisterState.bind(this)}>Registera dig</button>
                         </div>
                     </div>
                 }
@@ -112,6 +135,10 @@ class LoginForm extends Component {
                                 {this.state.error}
                             </div>
                             }
+                            <div>Förnamn:</div>
+                            <input type="text" name="firstname"></input>
+                            <div>Efternamn:</div>
+                            <input type="text" name="lastname"></input>
                             <div>
                                 Email:
                         </div>
@@ -127,14 +154,14 @@ class LoginForm extends Component {
                                 {!this.props.aUser && <input type={"password"} placeholder={"password"} name={"password"} ></input>}
                             </div>
                             <div>
-                                <button type={"submit"}>Registera</button>
+                                <button className={"formButton"} type={"submit"}>Registera</button>
                             </div>
                         </form>
                         <div>
                             Har du redan ett konto?
                         </div>
                         <div>
-                            <button type={"submit"} onClick={this.handleLoginState.bind(this)}>Logga in istället</button>
+                            <button type={"submit"} className={"formButton"} onClick={this.handleLoginState.bind(this)}>Logga in istället</button>
                         </div>
                     </div>
                 }

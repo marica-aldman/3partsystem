@@ -5,9 +5,9 @@ import { withRouter } from "react-router-dom"
 class Card extends Component {
 
     setIDForMovie = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         this.props.doChangeMovie(this.props.data.id);
-        this.props.history.push("/movie")
+        this.props.history.push("/movie");
     }
 
     render() {

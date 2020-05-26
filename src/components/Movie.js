@@ -10,7 +10,6 @@ class Movie extends Component {
         super(props);
         this.state = {
             movie: undefined,
-            userGroup: localStorage.getItem('ug') || null,
         }
     }
 
@@ -25,20 +24,6 @@ class Movie extends Component {
             .then((res) => {
 
                 this.setState({ movie: res.data[0] });
-                axios
-                    .get('http://localhost:1337/dates/')
-                    .then((result) => {
-                        this.state.movie.dates.map((date) => {
-                            var i = 0;
-                            while (i < result.data.length) {
-                                if (result.data[i].id === date.id) {
-                                    localStorage.setItem(result.data[i].id, JSON.stringify(result.data[i]));
-                                }
-                                i = i + 1;
-                            }
-                            return (date)
-                        })
-                    })
             })
     }
 
@@ -49,7 +34,7 @@ class Movie extends Component {
         return (
             <div>
                 {this.state.movie && <MovieInfo movie={this.state.movie} />}
-                {this.state.dates && <BookingStructure aUserGroup={this.props.aUserGroup} />}
+                {<BookingStructure movie={this.props.movie} />}
             </div >
         )
     }

@@ -31,6 +31,7 @@ class UserProfile extends Component {
             oldPassword: "",
             newPassword: "",
             newPasswordRepeat: "",
+            deleteAccountError: "",
         }
     }
 
@@ -44,20 +45,6 @@ class UserProfile extends Component {
             var nameArray = googleInfo.displayName.split(" ");
             this.setState({ firstname: nameArray[0], lastname: nameArray[1] });
         } else if (firebase.auth().currentUser) {
-            var storageRef = firebase.storage().ref();
-            var userRefPic = "ProfilePicture" + firebase.auth().currentUser.$.W;
-            // Create a reference to 'images/pp.jpg'
-            var profileImagesRef = storageRef.child('images/' + userRefPic);
-            profileImagesRef.getDownloadURL().then(url => {
-                this.setState({ profPic: url })
-            }).catch(error => {
-                if (error.code === "storage/object-not-found") {
-                    this.setState({ profPic: "#" })
-                } else {
-                    console.log(error.code);
-                }
-
-            });
             this.setState({ username: localStorage.getItem("un"), email: firebase.auth().currentUser.email })
             firebase.firestore().collection("userProfile").doc(firebase.auth().currentUser.$.W).get()
                 .then((test) => {
@@ -71,6 +58,23 @@ class UserProfile extends Component {
                             currentLastName = "";
                         }
                         this.setState({ firstname: currentFirstName, lastname: currentLastName });
+                        if (test.data().picture) {
+                            var storageRef = firebase.storage().ref();
+                            var userRefPic = "ProfilePicture" + firebase.auth().currentUser.$.W;
+                            // Create a reference to 'images/pp.jpg'
+                            var profileImagesRef = storageRef.child('images/' + userRefPic);
+                            profileImagesRef.getDownloadURL().catch(error => {
+                                console.log(error.code);
+                            }).then(url => {
+                                if (url !== undefined) {
+                                    this.setState({ profPic: url })
+                                } else {
+                                    this.setState({ profPic: "#" })
+                                }
+                            })
+                        } else {
+                            this.setState({ profPic: "#" })
+                        }
                     }
                 });
 
@@ -263,11 +267,8 @@ class UserProfile extends Component {
             if (!user.data().lastName) {
                 currentLastName = "";
             }
-            var currentProfilePicture = user.data().profilePicture;
-            if (!user.data().profilePicture) {
-                currentProfilePicture = ""
-            }
-            currentUserProfile = { 'firstName': currentFirstName, 'lastName': currentLastName, 'profilePicture': currentProfilePicture };
+            var currentPicture = user.data().picture;
+            currentUserProfile = { 'firstName': currentFirstName, 'lastName': currentLastName, 'picture': currentPicture };
         });
 
         //file upload
@@ -279,7 +280,7 @@ class UserProfile extends Component {
             var profileImagesRef = storageRef.child('images/' + userRefPic);
             await profileImagesRef.put(file);
             await profileImagesRef.getDownloadURL().then(function (url) {
-                currentUserProfile['profilePicture'] = url;
+                currentUserProfile['picture'] = true;
             });
             this.setState({ profPicUpdate: true });
         }
@@ -292,123 +293,128 @@ class UserProfile extends Component {
         if (this.state.newUsername || this.state.profPicUpdate) {
             docRef.update(currentUserProfile);
             this.setState({ message: "Profilinformation updaterad", username: this.state.newUsername, firstname: this.state.newFirstName, lastname: this.state.newLastName, profPic: currentUserProfile['profilePicture'] });
-            this.setState({ infoChange: false, newUsername: "", profPicUpdate: false, newFirstName: "", newLastName: "" });
+            this.setState({ infoChange: false, newUsername: "", profPicUpdate: false, newFirstName: "", newLastName: "" })
+            window.location.reload(false);
         }
     }
 
     deleteAccount(e) {
         e.preventDefault();
-        var user = firebase.auth().currentUser;
-        const databaseRef = firebase.firestore().collection("bookings");
-        var LoginFirebase;
-        if (localStorage.getItem('firebaseui::rememberedAccounts')) {
-            LoginFirebase = false;
-        } else {
-            LoginFirebase = true;
-        }
-        // to delete bookings
-        //get bookings
-        databaseRef.get().then((res) => {
-            var user = firebase.auth().currentUser.$.W;
-            res.docs.map(doc => {
-                var dateID = doc.id;
-                //go through each one
-                databaseRef.doc(user).collection(dateID).doc("tickets").get().then(items => {
-                    if (items.exists) {
-                        var booking = items.data()
-                        console.log(items)
-                        //return tickets to stash
-                        databaseRef.doc(dateID).get().then(dateRes => {
-                            var currentStash = dateRes.data().ticketsLeft;
-                            var newStash = currentStash + booking.amount;
-                            databaseRef.doc(dateID).update({
-                                ticketsLeft: newStash
-                            })
-                            //remove booking
-                            databaseRef.doc(user).collection(dateID).doc("tickets").delete().then(function () {
-                                console.log(this.state)
-                                if (!LoginFirebase) {
-                                    firebase.auth().currentUser.delete();
-                                    localStorage.clear();
-                                    window.location.reload(false);
-                                } else if (LoginFirebase) {
-
-                                    var email = e.target.email.value;
-                                    var password = e.target.password.value;
-                                    var credential = firebase.auth.EmailAuthProvider.credential(
-                                        email,
-                                        password,
-                                    );
-                                    // database refrence
-                                    const docRef = firebase.firestore().collection('userProfile').doc(firebase.auth().currentUser.$.W);
-                                    // root reference for file uploads
-                                    var storageRef = firebase.storage().ref();
-                                    // user
-                                    // verify user
-
-                                    user.reauthenticateWithCredential(credential).then((res) => {
-                                        // start by removing files
-                                        //first we need the reference
-                                        var userRefPic = "ProfilePicture" + firebase.auth().currentUser.$.W;
-                                        var profileImagesRef = storageRef.child('images/' + userRefPic);
-                                        profileImagesRef.delete();
-                                        // now delete user data in database
-                                        docRef.delete();
-                                        // delete user from auth
+        var email = e.target.email.value;
+        var password = e.target.password.value;
+        var theUser = firebase.auth().currentUser;
+        if (email === theUser.email) {
+            const databaseRef = firebase.firestore().collection("bookings");
+            var LoginFirebase;
+            if (localStorage.getItem('firebaseui::rememberedAccounts')) {
+                LoginFirebase = false;
+            } else {
+                LoginFirebase = true;
+            }
+            // to delete bookings
+            //get bookings
+            databaseRef.get().then((res) => {
+                var user = theUser.$.W;
+                res.docs.map(doc => {
+                    var dateID = doc.id;
+                    //go through each one
+                    databaseRef.doc(user).collection(dateID).doc("tickets").get().then(items => {
+                        if (items.exists) {
+                            var booking = items.data()
+                            console.log(items)
+                            //return tickets to stash
+                            databaseRef.doc(dateID).get().then(dateRes => {
+                                var currentStash = dateRes.data().ticketsLeft;
+                                var newStash = currentStash + booking.amount;
+                                databaseRef.doc(dateID).update({
+                                    ticketsLeft: newStash
+                                })
+                                //remove booking
+                                databaseRef.doc(user).collection(dateID).doc("tickets").delete().then(function () {
+                                    console.log(this.state)
+                                    if (!LoginFirebase) {
                                         firebase.auth().currentUser.delete();
                                         localStorage.clear();
                                         window.location.reload(false);
+                                    } else if (LoginFirebase) {
 
-                                    }).catch(error => { console.log(error.code) })
-                                }
+                                        var email = e.target.email.value;
+                                        var password = e.target.password.value;
+                                        var credential = firebase.auth.EmailAuthProvider.credential(
+                                            email,
+                                            password,
+                                        );
+                                        // database refrence
+                                        const docRef = firebase.firestore().collection('userProfile').doc(firebase.auth().currentUser.$.W);
+                                        // root reference for file uploads
+                                        var storageRef = firebase.storage().ref();
+                                        // user
+                                        // verify user
+
+                                        user.reauthenticateWithCredential(credential).then((res) => {
+                                            // start by removing files
+                                            //first we need the reference
+                                            var userRefPic = "ProfilePicture" + firebase.auth().currentUser.$.W;
+                                            var profileImagesRef = storageRef.child('images/' + userRefPic);
+                                            profileImagesRef.delete();
+                                            // now delete user data in database
+                                            docRef.delete();
+                                            // delete user from auth
+                                            firebase.auth().currentUser.delete();
+                                            localStorage.clear();
+                                            window.location.reload(false);
+
+                                        }).catch(error => { console.log(error.code) })
+                                    }
+                                })
                             })
-                        })
-                    } else {
-                        if (!LoginFirebase) {
+                        } else {
+                            if (!LoginFirebase) {
 
-                            firebase.auth().currentUser.delete();
-                            localStorage.clear();
-                            window.location.reload(false);
-                        } if (LoginFirebase) {
-
-                            var email = e.target.email.value;
-                            var password = e.target.password.value;
-                            var credential = firebase.auth.EmailAuthProvider.credential(
-                                email,
-                                password,
-                            );
-                            // database refrence
-                            const docRef = firebase.firestore().collection('userProfile').doc(firebase.auth().currentUser.$.W);
-                            // root reference for file uploads
-                            var storageRef = firebase.storage().ref();
-                            // user
-                            // verify user
-
-                            user.reauthenticateWithCredential(credential).then((res) => {
-                                // start by removing files
-                                //first we need the reference
-                                var userRefPic = "ProfilePicture" + firebase.auth().currentUser.$.W;
-                                var profileImagesRef = storageRef.child('images/' + userRefPic);
-                                profileImagesRef.delete();
-                                // now delete user data in database
-                                docRef.delete();
-                                // delete user from auth
                                 firebase.auth().currentUser.delete();
                                 localStorage.clear();
                                 window.location.reload(false);
+                            } if (LoginFirebase) {
+                                var credential = firebase.auth.EmailAuthProvider.credential(
+                                    email,
+                                    password,
+                                );
+                                // database refrence
+                                const docRef = firebase.firestore().collection('userProfile').doc(user);
+                                // root reference for file uploads
+                                var storageRef = firebase.storage().ref();
+                                // user
+                                // verify user
 
-                            }).catch(error => { console.log(error.code) })
+                                theUser.reauthenticateWithCredential(credential).then((res) => {
+                                    // start by removing files
+                                    //first we need the reference
+                                    var userRefPic = "ProfilePicture" + user;
+                                    var profileImagesRef = storageRef.child('images/' + userRefPic);
+                                    profileImagesRef.delete();
+                                    // now delete user data in database
+                                    docRef.delete();
+                                    // delete user from auth
+                                    theUser.delete();
+                                    localStorage.clear();
+                                    this.setState({ deleteAccountError: "" });
+                                    this.props.history.push("/");
+
+                                }).catch(error => { console.log(error.code) })
+                            }
                         }
-                    }
+                    })
                 })
             })
-        })
+        } else {
+            this.setState({ deleteAccountError: "Wrong email." });
+        }
 
     }
 
     render() {
         return (
-            <div>
+            <div className={"profileMain"}>
                 {!this.state.passwordChange && !this.state.infoChange && !this.state.emailChange && !this.state.accountDelete ?
                     <table>
                         <tbody>
@@ -433,7 +439,7 @@ class UserProfile extends Component {
                                     Bild:
                                 </td>
                                 <td>
-                                    <img src={this.state.profPic} />
+                                    <img src={this.state.profPic} style={{ width: "40px" }} />
                                 </td>
                             </tr>
                             <tr>
@@ -616,6 +622,9 @@ class UserProfile extends Component {
                                             <table>
                                                 <tbody>
                                                     <tr>
+                                                        <td>
+                                                            {this.state.deleteAccountError}
+                                                        </td>
                                                         <td>
                                                             Verifera din loggin för att radera kontot. Radera kontot kan inte göras ogjort. All data om dig kommer att försvinna från vår databas.
                                                     </td>

@@ -36,12 +36,7 @@ class CustomerNav extends Component {
                         localStorage.removeItem("cart");
                     }
                     // dont forget to remove it from reserved
-                    firebase.firestore().collection("reservedTickets").get().then(results => {
-                        console.log(results)
-                    })
-                    console.log(item.date)
                     firebase.firestore().collection("reservedTickets").doc(item.date).get().then(result => {
-                        console.log(result)
                         if (result.exists) {
                             // this should always exist if there are items in the cart
                             var newAmount = result.data().reserved - item.amount;
@@ -54,9 +49,8 @@ class CustomerNav extends Component {
                                 //something is wrong, there should be atleast the amount reserved for this cart
                                 console.log("warning somethings is wrong, to few reserved tickets")
                             }
-                        } else {
-                            console.log("warning somethings is wrong")
                         }
+                        return result;
                     });
                 }
                 return item;
@@ -135,7 +129,7 @@ class CustomerNav extends Component {
                                 databaseRef1.doc(theDate).set({
                                     ticketsLeft: ticketsL
                                 })
-                                databaseRef2.doc(item).delete();
+                                databaseRef2.doc(item.date).delete();
                                 var test = cart2.indexOf(item);
                                 cart2.splice(test, 1);
                                 localStorage.setItem("cart", JSON.stringify(cart2));
@@ -195,7 +189,8 @@ class CustomerNav extends Component {
         // we dont want to load a different page or reload here without a database query as the database queries are async and therefor a reload will always happen even if reload if we do a straight if statement
         firebase.firestore().collection("reservedTickets").get().then((tokeepsync) => {
             if (reload) {
-                localStorage.setItem("booked", "yes");
+                localStorage.removeItem("decrease", "increase");
+                this.setState({ cart_closed: true });
                 this.props.history.push("/bookings");
             }
         })
@@ -203,7 +198,44 @@ class CustomerNav extends Component {
 
     emptyCart = (e) => {
         e.preventDefault();
-        localStorage.removeItem("cart");
+        const databaseRef = firebase.firestore().collection("reservedTickets");
+        var cart = JSON.parse(localStorage.getItem("cart"));
+        var l = cart.length;
+        console.log(l);
+        var i = 0;
+        if (localStorage.getItem('cart')) {
+            cart.map(item => {
+                console.log(item)
+                // remove all the reservations
+                databaseRef.doc(item.date).get().then(reservation => {
+                    if (reservation.exists) {
+                        var currentAmount = reservation.data().reserved;
+                        var newAmount = currentAmount - item.amount;
+                        if (newAmount > 0) {
+                            databaseRef.doc(item.date).update({
+                                reserved: newAmount
+                            })
+                        } else {
+                            databaseRef.doc(item.date).delete()
+                        }
+                    }
+                    return reservation;
+                })
+                if ((l - 1) == i) {
+                    localStorage.removeItem("cart");
+                    window.location.reload(false);
+                } else {
+                    i += 1;
+                }
+                return item;
+            })
+        } else {
+            window.location.reload(false);
+        }
+        //sync or we will reload before removing items from reserved
+        databaseRef.doc("400").get().then(function () {
+            //window.location.reload(false);
+        })
     }
 
     increaseAmount = (e) => {
@@ -218,15 +250,11 @@ class CustomerNav extends Component {
         //check if there are any tickets left
         databaseRef1.doc(theDate).get().then((dateStash) => {
             if (dateStash.exists) {
-                console.log("checking for tickets")
                 var currentAmount = parseInt(dateStash.data().ticketsLeft);
                 cart.map(item => {
-                    console.log("looping cart")
                     var testDate = parseInt(theDate)
                     if (parseInt(item.date) === testDate) {
-                        console.log("dates same")
                         if ((currentAmount - parseInt(item.amount)) > 0 && (parseInt(item.amount) + 1 <= 6)) {
-                            console.log("increase item")
                             var newAmount = parseInt(item.amount) + 1;
                             //increase reserved tickets for the date
                             databaseRef2.doc(theDate).update({
@@ -241,7 +269,6 @@ class CustomerNav extends Component {
                                 return item;
                             })
                         } else {
-                            console.log("stop")
                             if (this.state.message === "") {
                                 this.setState({ message: item.movie + " den " + item.thedate })
                                 return item;
@@ -275,7 +302,6 @@ class CustomerNav extends Component {
                 if (parseInt(item.date) === testDate) {
                     //decrease reserved tickets for the date
                     databaseRef2.doc(theDate).get().then(test => {
-                        console.log(test)
                         if (test.exists) {
                             var newAmount = parseInt(item.amount) - 1;
                             if (newAmount > 0) {
@@ -337,13 +363,13 @@ class CustomerNav extends Component {
                     {this.state.cart_closed ?
                         <li key={"closed-cart"}>
                             <form onSubmit={this.handleOnclickCart}>
-                                <button className={""} onClick={this.handleOnclickCart} >Kundvagn</button>
+                                <button className={""} onClick={this.handleOnclickCart} ><i className={"fas fa-shopping-basket"}></i></button>
                             </form>
                         </li>
                         :
                         <li key={"open-cart"}>
                             <form onSubmit={this.handleOnclickLogin}>
-                                <button className={""} onClick={this.handleOnclickCart} >Kundvagn</button>
+                                <button className={""} onClick={this.handleOnclickCart} ><i className={"fas fa-shopping-basket"}></i></button>
                             </form>
                             <ul className={"basket"} >
                                 <li key={"cart-content"}>
@@ -394,13 +420,13 @@ class CustomerNav extends Component {
                                         </tbody>
                                     </table>
                                 </li>
-                                <li key={"cart-empty"}>
-                                    <button onClick={this.emptyCart}>T;m</button>
-                                </li>
                                 <li key={"cart-book"}>
-                                    <form onSubmit={this.handleSubmitCart}>
-                                        <button type={"submit"} onClick={this.handleSubmitCart}>Boka</button>
-                                    </form>
+                                    <div className={"cart-buttons"}>
+                                        <button onClick={this.emptyCart} className={"cart-button-part"}>Töm</button>
+                                        <form onSubmit={this.handleSubmitCart} className={"cart-button-part"}>
+                                            <button type={"submit"} onClick={this.handleSubmitCart}>Boka</button>
+                                        </form>
+                                    </div>
                                 </li>
                                 {this.state.alreadyBooked !== "" &&
                                     <li key={"cart-already-message"}>

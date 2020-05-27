@@ -22,7 +22,7 @@ class Card extends Component {
                         <h5 className={"card-title"}>{this.props.data.title}</h5>
                         <p className={"card-text"}>{this.props.data.description}</p>
                         <div className={"button-div"}>
-                            <button className={"card-button"} id={this.props.data.title} name={this.props.data.id} onClick={this.setIDForMovie}>Boka</button>
+                            <button className={"card-button"} id={this.props.data.title} name={this.props.data.id} onClick={this.setIDForMovie}>Se visningar</button>
                         </div>
                     </div>
                 </div>

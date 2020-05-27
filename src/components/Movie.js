@@ -32,7 +32,7 @@ class Movie extends Component {
             return (<Redirect to="/" />)
         }
         return (
-            <div>
+            <div className={"main-display"}>
                 {this.state.movie && <MovieInfo movie={this.state.movie} />}
                 {<BookingStructure movie={this.props.movie} />}
             </div >

@@ -18,6 +18,16 @@ class Nav extends Component {
         }
     }
 
+    componentDidMount() {
+        if (this.props.showVar) {
+            console.log("yes")
+            this.setState({ loginButtonText: "Logga in", toggleLogin: false, showLogin: "hide" });
+        } else {
+            console.log("no")
+            this.setState({ loginButtonText: "...", toggleLogin: true, showLogin: "" });
+        }
+    }
+
     handleOnclickLogin = (e) => {
         e.preventDefault()
         if (this.state.toggleLogin) {
@@ -27,9 +37,6 @@ class Nav extends Component {
         }
     }
 
-    changeShow = (e) => {
-        this.setState({ loginButtonText: "Logga in", toggleLogin: !e, showLogin: "hide" });
-    }
 
     handleOnclickLogout = (e) => {
         e.preventDefault()
@@ -77,13 +84,13 @@ class Nav extends Component {
                             </form>
                         </li>
                     }
-                    {(!this.props.aUser && !localStorage.getItem("firebaseui::rememberedAccounts")) &&
+                    {(!this.props.aUser && !localStorage.getItem("firebaseui::rememberedAccounts")) && !localStorage.getItem('u') &&
                         <li>
                             <form onSubmit={this.handleOnclickLogin}>
                                 <button className={this.state.toggleLogin ? "selected, formButton" : "deselected, formButton"} onClick={this.handleOnclickLogin}>{this.state.loginButtonText}</button>
                             </form>
                             {this.state.toggleLogin &&
-                                <LoginForm changeShow={this.changeShow} aUser={this.props.aUser} changeUser={this.props.changeUser} changeUserName={this.props.changeUserName} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} />}
+                                <LoginForm changeShow={this.props.toChangeTheShow} aUser={this.props.aUser} changeUser={this.props.changeUser} changeUserName={this.props.changeUserName} changeUserAuth={this.props.changeUserAuth} changeUserGroup={this.props.changeUserGroup} />}
                         </li>
                     }
                 </ul>

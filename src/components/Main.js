@@ -28,7 +28,7 @@ class Main extends Component {
 
     render() {
         return (
-            <div>
+            <div className={"main-display"}>
                 {this.state.movies.map((movie, i) => {
                     return (<Card key={i} data={movie} onSubmitHandler={this.onSubmitHandler} doChangeMovie={this.props.doChangeMovie} movie={this.props.movie} />)
                 })}

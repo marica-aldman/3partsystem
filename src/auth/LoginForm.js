@@ -44,17 +44,16 @@ class LoginForm extends Component {
         const email = e.target.elements.email.value;
         const password = e.target.elements.password.value;
         firebase.auth()
-            .signInWithEmailAndPassword(email, password).then(res => {
-                this.setState({ failedLogin: false });
-                this.props.changeUser(res.user.email);
-                this.props.changeUserName(res.user.displayName);
-                this.props.changeUserGroup('Customer');
-                this.props.changeShow(true);
-                this.props.history.push("/CustomerOverview");
-            }).catch(error => {
+            .signInWithEmailAndPassword(email, password).catch(error => {
                 console.log(error);
                 var failedLoginError = "Lösenordet eller användarnamnet är inkorrekt.";
                 this.setState({ failedLogin: true, error: failedLoginError });
+            }).then(res => {
+                this.props.changeShow(true);
+                this.props.changeUser(res.user.email);
+                this.props.changeUserGroup("Customer");
+                this.props.changeShow(true);
+                this.props.history.push("/profile");
             })
     }
 
@@ -64,20 +63,21 @@ class LoginForm extends Component {
         const LastName = e.target.elements.lastname.value;
         const email = e.target.elements.email.value;
         const password = e.target.elements.password.value;
+        var disName = FirstName + " " + LastName;
         firebase.auth()
             .createUserWithEmailAndPassword(email, password)
             .then((res) => {
-                res.user.updateProfile({ displayName: FirstName + " " + LastName })
+                res.user.updateProfile({ displayName: disName })
                 const docRef = firebase.firestore().collection('userProfile').doc(res.user.$.W);
                 docRef.set({
                     firstName: FirstName,
                     lastName: LastName,
+                    picture: false,
                 });
                 this.props.changeUser(res.user.email);
-                this.props.changeUserName(res.user.displayName);
                 this.props.changeUserGroup("Customer");
-                this.setState({ failedLogin: false });
-                this.props.history.push("/CustomerOverview");
+                this.props.changeShow(true);
+                this.props.history.push("/profile");
             }).catch((error) => {
                 console.log(error);
                 var failedRegistrationError = "Registrering misslyckades.";
@@ -87,14 +87,17 @@ class LoginForm extends Component {
 
     render() {
         return (
-            <div>
+            <div className={"navbar-loginform"}>
                 {this.state.login &&
-                    <div>
+                    <div className={"navbar-login"}>
                         <form onSubmit={this.onSubmitLogin.bind(this)}>
                             {this.state.failedLogin && <div>
                                 {this.state.error}
                             </div>
                             }
+                            <div>
+                                Logga in:
+                            </div>
                             <div>
                                 Email:
                             </div>
@@ -126,7 +129,7 @@ class LoginForm extends Component {
                 }
                 {
                     !this.state.login &&
-                    <div>
+                    <div className={"navbar-register"}>
                         <form onSubmit={this.onSubmitRegister.bind(this)}>
                             <div>
                                 Registrera dig:
@@ -136,9 +139,13 @@ class LoginForm extends Component {
                             </div>
                             }
                             <div>Förnamn:</div>
-                            <input type="text" name="firstname"></input>
+                            <div>
+                                <input type={"text"} name="firstname"></input>
+                            </div>
                             <div>Efternamn:</div>
-                            <input type="text" name="lastname"></input>
+                            <div>
+                                <input type={"text"} name="lastname"></input>
+                            </div>
                             <div>
                                 Email:
                         </div>

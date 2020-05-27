@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import firebase from "../components/FirebaseConfig";
-import { Redirect } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 
 class Bookings extends Component {
 
@@ -10,6 +10,40 @@ class Bookings extends Component {
             this.state = {
                   main: true,
             }
+      }
+
+      backButton = (e) => {
+            e.preventDefault();
+            var item = this.state.alterBooking;
+            var theMax = this.state.max;
+            //release the tickets from reserved
+            firebase.firestore().collection("reservedTickets").doc(item.date).get().then(reservations => {
+                  if (reservations.exists) {
+                        var currentReservations = reservations.data().reserved;
+                        var newReservations;
+                        if (theMax > 6) {
+                              newReservations = currentReservations - 6;
+                        } else {
+                              newReservations = currentReservations - theMax;
+                        }
+                        if (newReservations > 0) {
+                              firebase.firestore().collection("reservedTickets").doc(item.date).update({
+                                    reserved: newReservations
+                              }).then(function () {
+                                    localStorage.setItem("back", "yes");
+                                    window.location.reload(false);
+                              })
+                        } else {
+                              firebase.firestore().collection("reservedTickets").doc(item.date).delete().then(function () {
+                                    localStorage.setItem("back", "yes");
+                                    window.location.reload(false);
+                              })
+                        }
+                  } else {
+                        console.log("Nothing reserved though it should be");
+                  }
+                  return reservations;
+            })
       }
 
       changeBooking = (e) => {
@@ -169,41 +203,48 @@ class Bookings extends Component {
             })
       }
 
-      async componentDidMount() {
-
-            const databaseRef = firebase.firestore().collection("bookings");
-            var theBookings = [];
-            databaseRef.get().then((res) => {
-                  var user = firebase.auth().currentUser.$.W;
-                  res.docs.map(doc => {
-                        var dateID = doc.id;
-                        databaseRef.doc(user).collection(dateID).doc("tickets").get().then(items => {
-                              var booking = items.data()
-                              if (booking) {
-                                    axios.get('http://localhost:1337/dates/' + dateID).then(result => {
-                                          booking["movie"] = result.data.movie.title;
-                                          booking["salon"] = result.data.salon.Name;
-                                          booking["theDate"] = result.data.date;
-                                          booking["time"] = result.data.time;
-                                          theBookings.push(booking);
-                                          this.setState({ bookings: theBookings })
-                                    }).catch((error) => {
-                                          console.log(error);
-                                          console.log("Not good");
-                                    })
-                              }
+      componentDidMount() {
+            if (localStorage.getItem("back")) {
+                  this.setState({ main: true, alterBooking: null, max: null, reserved: null });
+                  localStorage.removeItem("back");
+            }
+            if (firebase.auth().currentUser || localStorage.getItem("u")) {
+                  const databaseRef = firebase.firestore().collection("bookings");
+                  var theBookings = [];
+                  databaseRef.get().then((res) => {
+                        var user = firebase.auth().currentUser.$.W;
+                        res.docs.map(doc => {
+                              var dateID = doc.id;
+                              databaseRef.doc(user).collection(dateID).doc("tickets").get().then(items => {
+                                    var booking = items.data()
+                                    if (booking) {
+                                          axios.get('http://localhost:1337/dates/' + dateID).then(result => {
+                                                booking["movie"] = result.data.movie.title;
+                                                booking["salon"] = result.data.salon.Name;
+                                                booking["theDate"] = result.data.date;
+                                                booking["time"] = result.data.time;
+                                                theBookings.push(booking);
+                                                this.setState({ bookings: theBookings })
+                                          }).catch((error) => {
+                                                console.log(error);
+                                                console.log("Not good");
+                                          })
+                                    }
+                              })
                         })
                   })
-            })
+            } else {
+                  this.props.history.push("/");
+            }
       }
 
 
       render() {
             return (
-                  <main>
+                  <main className={"bookingsMain"}>
                         {
                               this.state.main ?
-                                    <table>
+                                    <table className={"bookingList"}>
                                           <thead>
                                                 <tr>
                                                       <th>
@@ -221,6 +262,12 @@ class Bookings extends Component {
                                                       <th>
                                                             Antal biljetter
                                           </th>
+                                                      <th>
+                                                            Hantera
+                                          </th>
+                                                      <th>
+                                                            Avboka
+                                          </th>
                                                 </tr>
                                           </thead>
                                           <tbody>
@@ -236,23 +283,24 @@ class Bookings extends Component {
                                                                   {item.theDate}
                                                             </td>
                                                             <td>
-                                                                  {item.time}
+                                                                  {item.time === "17:00:00.000" ? "17.00" : item.time === "19:30:00.000" ? "19.30" : item.time === "22:00:00.000" ? "22.00" : ""}
                                                             </td>
                                                             <td>
                                                                   {item.amount}
                                                             </td>
                                                             <td>
-                                                                  <button onClick={this.changeBooking} value={item.date}>Ändra bokning</button>
+                                                                  <button onClick={this.changeBooking} value={item.date} className={"changebutton"}>Ändra</button>
                                                             </td>
                                                             <td>
-                                                                  <button onClick={this.deleteBooking} value={item.date}>Avboka</button>
+                                                                  <button onClick={this.deleteBooking} value={item.date} className={"cancelbutton"}>Avboka</button>
                                                             </td>
                                                       </tr>
                                                 )
                                                 }
                                           </tbody>
-                                    </table> :
-                                    <div>
+                                    </table>
+                                    :
+                                    <div className={"bookingChange"}>
                                           <form onSubmit={this.submitAlterBooking}>
                                                 <table>
                                                       <tbody>
@@ -294,12 +342,12 @@ class Bookings extends Component {
                                                                   </td>
                                                                   <td>
                                                                         <input type="number" name={"newAmount"} defaultValue={this.state.alterBooking.amount} min={"1"} max={this.state.max > 6 ? 6 : this.state.max}></input>
-                                                                        {this.state.max}
                                                                   </td>
                                                             </tr>
                                                       </tbody>
                                                 </table>
                                                 <div>
+                                                      <button onClick={this.backButton}>Tillbaka</button>
                                                       <button type="submit" >Spara</button>
                                                 </div>
                                           </form>
@@ -312,4 +360,4 @@ class Bookings extends Component {
       }
 }
 
-export default Bookings;
+export default withRouter(Bookings);

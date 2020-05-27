@@ -13,13 +13,13 @@ class BookingStructure extends Component {
 
 
     componentDidMount() {
+        // get windowsize
+        const windowWidth = window.innerWidth
         // get all available dates for this movie
         axios
             .get('http://localhost:1337/dates/?movie.id=' + this.props.movie)
             .then((result) => {
                 var theDates = result.data
-                // remove all dates that have passed
-                console.log("Dont forget to remove past dates");
                 //firebase connection
                 const databaseRef = firebase.firestore()
                 // check how many are reserved and booked for each date so we can see how many are left
@@ -28,42 +28,18 @@ class BookingStructure extends Component {
                     var nrReserved = 0;
                     databaseRef.collection("reservedTickets").doc(date.id.toString()).get().then((res) => {
                         if (res.exists) {
-                            if (Array.isArray(res)) {
-                                if (res.length() > 1) {
-                                    var i = 0;
-                                    while (i < (res.length - 1)) {
-                                        console.log(i);
-                                        console.log(res[i])
-                                        /* if (nrReserved > 0 && nrReserved !== res[i].ticketsLeft) {
-                                            if (nrReserved > res[i].ticketsLeft) {
-        
-                                            } else {
-                                                nrReserved = res[i].ticketsLeft;
-                                            }
-                                        }
-                                        nrReserved = allReserved + res[i].reserved; */
-                                        console.log(res[i]);
-                                        i += 1;
-                                    }
-                                    //date.TicketsLeft = date.TicketsLeft - allReserved;
-                                } else {
-                                    console.log("only one");
-                                    console.log(res);
-                                    console.log(res.data());
-                                }
+                            var ticket = res.data();
+                            var ticketTime = ticket.timeSet;
+                            var d = new Date();
+                            var timestamp = d.getTime();
+                            var timeDifferenceInMin = ((timestamp / 60000) - (ticketTime / 60000))
+                            if (timeDifferenceInMin < 20) {
+                                //less than 20 min
+                                nrReserved = ticket.reserved;
                             } else {
-                                var ticket = res.data();
-                                var ticketTime = ticket.timeSet;
-                                var d = new Date();
-                                var timestamp = d.getTime();
-                                var timeDifferenceInMin = ((timestamp / 60000) - (ticketTime / 60000))
-                                if (timeDifferenceInMin > 20) {
-                                    console.log("less than 20 min");
-                                    nrReserved = ticket.reserved;
-                                    console.log(nrReserved)
-                                } else {
-                                    console.log("more than 20 min");
-                                }
+                                //more than 20 min
+                                nrReserved = 0;
+                                databaseRef.collection("reservedTickets").doc(date.id.toString()).delete();
                             }
                         }
                     }).catch((error) => {
@@ -75,14 +51,14 @@ class BookingStructure extends Component {
                         if (res2.exists) {
                             nrBooked = res2.data().ticketsLeft
                         }
+                        date.TicketsLeft = nrBooked - nrReserved;
+                        this.setState({ updatingState: true });
+                        return (date);
                     }).catch((error) => {
                         console.log(error);
                     })
-                    date.TicketsLeft = date.salon.seats - (nrReserved + nrBooked);
-                    this.setState({ updatingState: true });
-                    return (date);
                 })
-                this.setState({ dates: theDates });
+                this.setState({ dates: theDates, windowSize: windowWidth });
             });
     }
 
@@ -238,77 +214,158 @@ class BookingStructure extends Component {
 
     render() {
         return (
-            <div className={"card"} style={{ width: "18rem" }}>
-                <div>
-                    {this.state.message}
-                </div>
-                <div className={"card-wrapper"}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    Salong
+            <div>
+                {this.state.windowSize > 600 ? <div className={"card-style1"}>
+                    <div>
+                        {this.state.message}
+                    </div>
+                    <div className={"card-style1-wrapper"}>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Salong
                                 </th>
-                                <th>
-                                    Datum
+                                    <th>
+                                        Datum
                                 </th>
-                                <th>
-                                    Biljetter kvar
+                                    <th>
+                                        Tid
                                 </th>
-                                <th>
-                                    Biljetter önskade
+                                    <th>
+                                        Biljetter kvar
                                 </th>
-                                <th>
-                                    &nbsp;
+                                    <th>
+                                        Biljetter önskade
                                 </th>
-                            </tr>
-                        </thead>
-                    </table>
-                    {this.state.dates && this.state.dates.map((date) =>
-                        <form onSubmit={this.handleBooking} key={date.id}>
+                                    <th>
+                                        Boka
+                                </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        {this.state.dates && this.state.dates.map((date) =>
+                            <form onSubmit={this.handleBooking} key={date.id}>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type={"hidden"} name={"salon"} value={date.salon.Name} />
+                                                {date.salon.Name}
+                                            </td>
+                                            <td>
+                                                <input type={"hidden"} name={"date"} value={date.id} />
+                                                {date.date}
+                                            </td>
+                                            <td>
+                                                <input type={"hidden"} name={"theDate"} value={date.date} />
+                                                {date.time === "17:00:00.000" ? "17.00" : date.time === "19:30:00.000" ? "19.30" : (date.time === "22:00:00.000") && "22.00"}
+                                                {date.time === "17:00:00.000" ? <input type={"hidden"} name={"thetime"} value={"17.00"} /> : date.time === "19:30:00.000" ? <input type={"hidden"} name={"thetime"} value={"19.30"} /> : (date.time === "22:00:00.000") && <input type={"hidden"} name={"thetime"} value={"22.00"} />}
+                                            </td>
+                                            <td>
+                                                <input type={"hidden"} name={"seats"} value={date.salon.seats} />
+                                                {date.TicketsLeft}
+                                            </td>
+                                            <td>
+                                                <input type={'number'} name={"amount"} max={date.TicketsLeft > 6 ? "6" : date.TicketsLeft} min="1" defaultValue="1" />
+                                            </td>
+                                            <td>
+                                                <input type={"hidden"} name={"movie"} value={date.movie.title} />
+                                                {
+                                                    (firebase.auth().currentUser || localStorage.getItem('firebaseui::rememberedAccounts')) ?
+                                                        <button type="submit" >
+                                                            <i className={"fas fa-shopping-basket"}></i>
+                                                        </button>
+                                                        :
+                                                        <button type="submit" disabled>
+                                                            <i className={"fas fa-shopping-basket"}></i>
+                                                        </button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        )}
+                    </div>
+                </div >
+                    :
+                    <div className={"card-style1"} style={{ width: "18rem" }}>
+                        <div>
+                            {this.state.message}
+                        </div>
+                        <div className={"card-style1-wrapper"}>
                             <table>
-                                <tbody>
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <input type={"hidden"} name={"salon"} value={date.salon.Name} />
-                                            {date.salon.Name}
-                                        </td>
-                                        <td>
-                                            <input type={"hidden"} name={"date"} value={date.id} />
-                                            {date.date}
-                                        </td>
-                                        <td>
-                                            <input type={"hidden"} name={"theDate"} value={date.date} />
-                                            {date.time === "17:00:00.000" ? "17.00" : date.time === "19:30:00.000" ? "19.30" : (date.time === "22:00:00.000") && "22.00"}
-                                            {date.time === "17:00:00.000" ? <input type={"hidden"} name={"thetime"} value={"17.00"} /> : date.time === "19:30:00.000" ? <input type={"hidden"} name={"thetime"} value={"19.30"} /> : (date.time === "22:00:00.000") && <input type={"hidden"} name={"thetime"} value={"22.00"} />}
-                                        </td>
-                                        <td>
-                                            <input type={"hidden"} name={"seats"} value={date.salon.seats} />
-                                            {date.TicketsLeft}
-                                        </td>
-                                        <td>
-                                            <input type={'number'} name={"amount"} max={date.TicketsLeft > 6 ? "6" : date.TicketsLeft} min="1" defaultValue="1" />
-                                        </td>
-                                        <td>
-                                            <input type={"hidden"} name={"movie"} value={date.movie.title} />
-                                            {
-                                                (firebase.auth().currentUser || localStorage.getItem('firebaseui::rememberedAccounts')) ?
-                                                    <button type="submit" >
-                                                        Lägg i varukorg
-                                                    </button>
-                                                    :
-                                                    <button type="submit" disabled>
-                                                        Lägg i varukorg
-                                                    </button>
-                                            }
-                                        </td>
+                                        <th>
+                                            Salong
+                                </th>
+                                        <th>
+                                            Datum
+                                </th>
+                                        <th>
+                                            Tid
+                                </th>
+                                        <th>
+                                            Biljetter kvar
+                                </th>
+                                        <th>
+                                            Biljetter önskade
+                                </th>
+                                        <th>
+                                            Boka
+                                </th>
                                     </tr>
-                                </tbody>
+                                </thead>
                             </table>
-                        </form>
-                    )}
-                </div>
-            </div >
+                            {this.state.dates && this.state.dates.map((date) =>
+                                <form onSubmit={this.handleBooking} key={date.id}>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <input type={"hidden"} name={"salon"} value={date.salon.Name} />
+                                                    {date.salon.Name}
+                                                </td>
+                                                <td>
+                                                    <input type={"hidden"} name={"date"} value={date.id} />
+                                                    {date.date}
+                                                </td>
+                                                <td>
+                                                    <input type={"hidden"} name={"theDate"} value={date.date} />
+                                                    {date.time === "17:00:00.000" ? "17.00" : date.time === "19:30:00.000" ? "19.30" : (date.time === "22:00:00.000") && "22.00"}
+                                                    {date.time === "17:00:00.000" ? <input type={"hidden"} name={"thetime"} value={"17.00"} /> : date.time === "19:30:00.000" ? <input type={"hidden"} name={"thetime"} value={"19.30"} /> : (date.time === "22:00:00.000") && <input type={"hidden"} name={"thetime"} value={"22.00"} />}
+                                                </td>
+                                                <td>
+                                                    <input type={"hidden"} name={"seats"} value={date.salon.seats} />
+                                                    {date.TicketsLeft}
+                                                </td>
+                                                <td>
+                                                    <input type={'number'} name={"amount"} max={date.TicketsLeft > 6 ? "6" : date.TicketsLeft} min="1" defaultValue="1" />
+                                                </td>
+                                                <td>
+                                                    <input type={"hidden"} name={"movie"} value={date.movie.title} />
+                                                    {
+                                                        (firebase.auth().currentUser || localStorage.getItem('firebaseui::rememberedAccounts')) ?
+                                                            <button type="submit" >
+                                                                <i className={"fas fa-shopping-basket"}></i>
+                                                            </button>
+                                                            :
+                                                            <button type="submit" disabled>
+                                                                <i className={"fas fa-shopping-basket"}></i>
+                                                            </button>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            )}
+                        </div>
+                    </div >
+                }
+            </div>
         )
     }
 
@@ -316,5 +373,3 @@ class BookingStructure extends Component {
 
 
 export default BookingStructure;
-
-//{this.props.aUserGroup != 'Authenticated' ? 'disabled' : ''}

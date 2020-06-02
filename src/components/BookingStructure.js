@@ -57,6 +57,7 @@ class BookingStructure extends Component {
                     }).catch((error) => {
                         console.log(error);
                     })
+                    return date;
                 })
                 this.setState({ dates: theDates, windowSize: windowWidth });
             });
@@ -108,8 +109,8 @@ class BookingStructure extends Component {
                                             // we already have this one, update amount instead
                                             double = true;
                                             anItem.amount = parseInt(anItem.amount) + parseInt(amount);
-                                            return anItem;
                                         }
+                                        return anItem;
                                     })
                                     if (!double) {
                                         //add to cart
@@ -147,8 +148,8 @@ class BookingStructure extends Component {
                                             // we already have this one, update amount instead
                                             double = true;
                                             anItem.amount = parseInt(anItem.amount) + parseInt(amount);
-                                            return anItem;
                                         }
+                                        return anItem;
                                     })
                                     if (!double) {
                                         //add to cart
@@ -187,8 +188,8 @@ class BookingStructure extends Component {
                                         // we already have this one, update amount instead
                                         double = true;
                                         anItem.amount = parseInt(anItem.amount) + parseInt(amount);
-                                        return anItem;
                                     }
+                                    return anItem;
                                 })
                                 if (!double) {
                                     //add to cart

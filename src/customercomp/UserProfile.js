@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 import firebase from "../components/FirebaseConfig";
 import 'firebase/firestore';
 import 'firebase/storage';
@@ -37,8 +37,6 @@ class UserProfile extends Component {
 
     componentDidMount() {
         if (localStorage.getItem('firebaseui::rememberedAccounts')) {
-            var email_allowed;
-            //axios.get('/{user-id}/permissions').then({})
             this.setState({ loginFirebase: false })
             var googleInfo = JSON.parse(localStorage.getItem('firebaseui::rememberedAccounts'))[0];
             this.setState({ username: googleInfo.displayName, email: googleInfo.email, profPic: googleInfo.photoUrl, providerID: googleInfo.providerId })
@@ -404,6 +402,7 @@ class UserProfile extends Component {
                             }
                         }
                     })
+                    return doc;
                 })
             })
         } else {
@@ -413,6 +412,9 @@ class UserProfile extends Component {
     }
 
     render() {
+        if (!localStorage.getItem("u") || !localStorage.getItem("firebaseui::rememberedAccounts") || !firebase.auth().currentUser) {
+            return (<Redirect to="/" />)
+        }
         return (
             <div className={"profileMain"}>
                 {!this.state.passwordChange && !this.state.infoChange && !this.state.emailChange && !this.state.accountDelete ?
@@ -439,7 +441,7 @@ class UserProfile extends Component {
                                     Bild:
                                 </td>
                                 <td>
-                                    <img src={this.state.profPic} style={{ width: "40px" }} />
+                                    <img src={this.state.profPic} alt={"profilepicture"} style={{ width: "40px" }} />
                                 </td>
                             </tr>
                             <tr>

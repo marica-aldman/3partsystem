@@ -8,7 +8,7 @@ class AdminProfile extends Component {
 
     render() {
         return (
-            <div>Test</div>
+            <div>Var god använd navigationen ovan för att navigera inom adminsidorna</div>
         )
     }
 }

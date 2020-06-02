@@ -51,10 +51,12 @@ class Bookings extends Component {
             var d = new Date();
             var n = d.getTime();
             var item;
+            var newAmount;
             this.state.bookings.map(book => {
                   if (e.target.value === book.date) {
                         item = book;
                   }
+                  return book;
             })
             firebase.firestore().collection("bookings").doc(item.date).get().then(result => {
                   //reserve tickets just in case of increasing tickets
@@ -66,7 +68,6 @@ class Bookings extends Component {
                               var timeDifferenceInMin = ((n / 60000) - (res1.data().timeSet / 60000))
                               if (timeDifferenceInMin > 20) {
                                     //check max
-                                    var newAmount;
                                     if (theMax > 6) {
                                           newAmount = res1.data().reserved + 6;
                                     } else {
@@ -79,7 +80,6 @@ class Bookings extends Component {
                                     })
                               } else {
                                     //preivous reservations outdated
-                                    var newAmount;
                                     if (theMax > 6) {
                                           newAmount = 6;
                                     } else {
@@ -231,6 +231,7 @@ class Bookings extends Component {
                                           })
                                     }
                               })
+                              return doc;
                         })
                   })
             } else {
@@ -240,6 +241,9 @@ class Bookings extends Component {
 
 
       render() {
+            if (!localStorage.getItem("u") || !localStorage.getItem("firebaseui::rememberedAccounts") || !firebase.auth().currentUser) {
+                  return (<Redirect to="/" />)
+            }
             return (
                   <main className={"bookingsMain"}>
                         {

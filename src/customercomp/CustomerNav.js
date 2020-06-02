@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, Redirect } from "react-router-dom";
 import firebase from "../components/FirebaseConfig";
 
 
@@ -221,7 +221,7 @@ class CustomerNav extends Component {
                     }
                     return reservation;
                 })
-                if ((l - 1) == i) {
+                if ((l - 1) === i) {
                     localStorage.removeItem("cart");
                     window.location.reload(false);
                 } else {
@@ -339,13 +339,16 @@ class CustomerNav extends Component {
 
                 }
 
-                return item;
             } catch (error) { console.log(error) }
+            return item;
         })
 
     }
 
     render() {
+        if (!localStorage.getItem("u") || !localStorage.getItem("firebaseui::rememberedAccounts") || !firebase.auth().currentUser) {
+            return (<Redirect to="/" />)
+        }
         return (
 
             <nav className={"second-menu"} >

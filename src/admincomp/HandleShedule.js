@@ -10,6 +10,7 @@ class HandleShedule extends Component {
         }
     }
     async componentDidMount() {
+        //get all the necessary data
         const res1 = await axios.get('http://localhost:1337/movies/')
         const amovie = await axios.get('http://localhost:1337/movies/1')
         const res2 = await axios.get('http://localhost:1337/salons/')
